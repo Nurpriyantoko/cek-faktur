@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Portal Dev - Cek Faktur Terkini</title>
-    <!-- Memuat framework CSS langsung lewat internet -->
+    <!-- Memuat desain resmi Bootstrap dan FontAwesome via internet -->
     <link rel="stylesheet" href="https://jsdelivr.net">
     <link rel="stylesheet" href="https://cloudflare.com">
     <style>
@@ -109,16 +109,16 @@
                     if (!lines[i].trim()) continue;
                     const columns = parseCSVLine(lines[i]);
                     if (columns.length > 3 && columns) {
-                        const noFakturSheet = columns[3].replace(/^"(.*)"\$/, '\$1').trim().toLowerCase();
+                        const noFakturSheet = columns[0].replace(/^"(.*)"\$/, '\$1').trim().toLowerCase();
                         if (noFakturSheet === inputFaktur) {
                             dataDitemukan = {
-                                tanggal: columns[0] ? columns[0].replace(/^"(.*)"\$/, '\$1').trim() : '-',
-                                customer: columns[1] ? columns[1].replace(/^"(.*)"\$/, '\$1').trim() : '-',
-                                no_faktur: columns[3] ? columns[3].replace(/^"(.*)"\$/, '\$1').trim() : '-',
-                                vin: columns[4] ? columns[4].replace(/^"(.*)"\$/, '\$1').trim() : '-',
-                                nama_part: columns[5] ? columns[5].replace(/^"(.*)"\$/, '\$1').trim() : '-',
-                                total: columns[11] ? columns[11].replace(/^"(.*)"\$/, '\$1').trim() : '0',
-                                status: columns[13] ? columns[13].replace(/^"(.*)"\$/, '\$1').trim().toUpperCase() : 'BELUM BAYAR'
+                                tanggal: columns[1] ? columns[1].replace(/^"(.*)"\$/, '\$1').trim() : '-',
+                                customer: columns[2] ? columns[2].replace(/^"(.*)"\$/, '\$1').trim() : '-',
+                                no_faktur: columns[0] ? columns[0].replace(/^"(.*)"\$/, '\$1').trim() : '-',
+                                vin: columns[3] ? columns[3].replace(/^"(.*)"\$/, '\$1').trim() : '-',
+                                nama_part: columns[4] ? columns[4].replace(/^"(.*)"\$/, '\$1').trim() : '-',
+                                total: columns[5] ? columns[5].replace(/^"(.*)"\$/, '\$1').trim() : '0',
+                                status: columns[6] ? columns[6].replace(/^"(.*)"\$/, '\$1').trim().toUpperCase() : 'BELUM BAYAR'
                             };
                             break;
                         }
