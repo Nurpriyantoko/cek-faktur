@@ -4,27 +4,29 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Portal Dev - Cek Faktur Terkini</title>
-    <!-- Memuat Bootstrap resmi yang didukung GitHub Pages -->
+    <!-- Memuat framework CSS langsung lewat internet -->
     <link rel="stylesheet" href="https://jsdelivr.net">
     <link rel="stylesheet" href="https://cloudflare.com">
     <style>
         body { font-family: 'Nunito', sans-serif; background-color: #f8f9fc; margin: 0; padding: 0; }
-        .sidebar { background: linear-gradient(180deg, #4e73df 10%, #224abe 100%); min-height: 100vh; padding: 1.5rem 1rem; color: #fff; }
+        .sidebar-container { background: linear-gradient(180deg, #4e73df 10%, #224abe 100%); min-height: 100vh; padding: 1.5rem 1rem; color: #fff; }
         .sidebar-brand { color: #fff; font-weight: 800; font-size: 1.2rem; text-decoration: none; text-transform: uppercase; display: block; text-align: center; margin-bottom: 1.5rem; }
         .sidebar-brand:hover { color: #fff; text-decoration: none; }
         .sidebar-heading { color: rgba(255,255,255,.4); font-size: .75rem; font-weight: 800; text-transform: uppercase; letter-spacing: .1rem; margin-bottom: 0.5rem; }
         .nav-link { color: rgba(255,255,255,.8); font-weight: 700; display: block; padding: .5rem 0; text-decoration: none; }
         .nav-link:hover, .nav-item.active .nav-link { color: #fff; text-decoration: none; }
         .topbar { background-color: #fff; height: 4.375rem; margin-bottom: 2rem; box-shadow: 0 .15rem 1.75rem 0 rgba(58,59,69,.15); width: 100%; }
-        .card { border: none; border-radius: .35rem; box-shadow: 0 .15rem 1.75rem 0 rgba(58,59,69,.15); }
+        .card { border: none; border-radius: .35rem; box-shadow: 0 .15rem 1.75rem 0 rgba(58,59,69,.15); background-color: #fff; }
         .card-header { background-color: #f8f9fc; border-bottom: 1px solid #e3e6f0; font-weight: 700; color: #4e73df; }
     </style>
 </head>
 <body>
+
     <div class="container-fluid p-0">
         <div class="row no-gutters">
-            <!-- Sidebar Menu Samping -->
-            <div class="col-md-2 sidebar">
+            
+            <!-- 1. SIDEBAR MENU (KIRI) -->
+            <div class="col-md-2 sidebar-container">
                 <a class="sidebar-brand" href="#"><i class="fas fa-tools mr-2"></i>Part Counter</a>
                 <hr class="border-light">
                 <div class="sidebar-heading">Menu Utama</div>
@@ -33,14 +35,14 @@
                 </div>
             </div>
 
-            <!-- Konten Utama Halaman -->
-            <div class="col-md-10 d-flex flex-column">
+            <!-- 2. KONTEN UTAMA (KANAN) -->
+            <div class="col-md-10 d-flex flex-column bg-light">
                 <div class="topbar"></div>
                 <div class="container-fluid px-4">
                     <h1 class="h3 mb-4 text-gray-800">Sistem Pengecekan Faktur <span class="badge badge-primary font-weight-normal text-xs ml-2"><i class="fas fa-sync-alt fa-spin mr-1"></i> Live Auto-Update</span></h1>
                     
-                    <!-- Form Pencarian -->
-                    <div class="card mb-4 col-xl-9 col-lg-12 p-0">
+                    <!-- Formulir Input -->
+                    <div class="card mb-4 col-lg-8 p-0">
                         <div class="card-header py-3">Cari Data Faktur Terkini</div>
                         <div class="card-body">
                             <form id="cekForm">
@@ -57,17 +59,18 @@
                         </div>
                     </div>
 
-                    <!-- Kotak Hasil Detail Transaksi -->
-                    <div id="boxHasil" class="card mb-4 col-xl-9 col-lg-12 p-0 d-none">
+                    <!-- Kotak Tabel Hasil -->
+                    <div id="boxHasil" class="card mb-4 col-lg-8 p-0 d-none">
                         <div id="headerHasil" class="card-header py-3 text-white">Detail Data Ditemukan</div>
                         <div class="card-body text-dark" id="konten"></div>
                     </div>
                 </div>
             </div>
+
         </div>
     </div>
 
-    <!-- Memuat library pendukung secara online -->
+    <!-- Memuat Javascript via Internet -->
     <script src="https://cloudflare.com"></script>
     <script src="https://jsdelivr.net"></script>
 
@@ -114,8 +117,8 @@
                                 no_faktur: columns[3] ? columns[3].replace(/^"(.*)"\$/, '\$1').trim() : '-',
                                 vin: columns[4] ? columns[4].replace(/^"(.*)"\$/, '\$1').trim() : '-',
                                 nama_part: columns[5] ? columns[5].replace(/^"(.*)"\$/, '\$1').trim() : '-',
-                                total: columns[12] ? columns[12].replace(/^"(.*)"\$/, '\$1').trim() : '0',
-                                status: columns[14] ? columns[14].replace(/^"(.*)"\$/, '\$1').trim().toUpperCase() : 'BELUM BAYAR'
+                                total: columns[11] ? columns[11].replace(/^"(.*)"\$/, '\$1').trim() : '0',
+                                status: columns[13] ? columns[13].replace(/^"(.*)"\$/, '\$1').trim().toUpperCase() : 'BELUM BAYAR'
                             };
                             break;
                         }
