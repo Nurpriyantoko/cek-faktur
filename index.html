@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Portal Dev - Cek Faktur Terkini</title>
-    <!-- Memuat Bootstrap resmi via online agar tampilan terkunci rapi -->
+    <!-- Memuat desain Bootstrap dan ikon langsung via internet secara aman -->
     <link rel="stylesheet" href="https://jsdelivr.net">
     <link rel="stylesheet" href="https://cloudflare.com">
     <style>
@@ -25,7 +25,7 @@
     <div class="container-fluid p-0">
         <div class="row no-gutters">
             
-            <!-- SIDEBAR MENU (KIRI) -->
+            <!-- 1. SIDEBAR MENU SISI KIRI -->
             <div class="col-md-2 sidebar-container">
                 <a class="sidebar-brand" href="#"><i class="fas fa-tools mr-2"></i>Part Counter</a>
                 <hr class="border-light">
@@ -35,7 +35,7 @@
                 </div>
             </div>
 
-            <!-- AREA UTAMA (KANAN) -->
+            <!-- 2. AREA KONTEN UTAMA SISI KANAN -->
             <div class="col-md-10 d-flex flex-column bg-light">
                 <div class="topbar"></div>
                 <div class="container-fluid px-4">
@@ -70,18 +70,20 @@
         </div>
     </div>
 
+    <!-- Memuat Javascript via Internet -->
     <script src="https://cloudflare.com"></script>
     <script src="https://jsdelivr.net"></script>
 
     <script>
         const LINK_CSV_ANDA = "https://google.com";
 
+        // Fungsi pembaca CSV yang dimodifikasi untuk mendukung pemisah titik koma (;) dari Google Sheets regional Indonesia
         function parseCSVLine(text) {
             let p = '', r = []; let q = false;
             for (let i = 0; i < text.length; i++) {
                 let c = text[i];
                 if (c === '"') { q = !q; }
-                else if (c === ',' && !q) { r.push(p); p = ''; }
+                else if ((c === ';' || c === ',') && !q) { r.push(p); p = ''; }
                 else { p += c; }
             }
             r.push(p); return r;
@@ -104,25 +106,25 @@
                 const lines = csvText.split("\n");
                 let dataDitemukan = null;
 
-                // Loop membaca baris data spreadsheet
+                // Loop membaca baris data spreadsheet (melewati header)
                 for (let i = 3; i < lines.length; i++) {
                     if (!lines[i].trim()) continue;
                     
                     const columns = parseCSVLine(lines[i]);
                     
-                    // Membaca Kolom ke-2 (indeks 1) yaitu Nomor Job Order / Kwitansi
+                    // Kolom ke-2 (indeks 1) adalah Kolom "No Job Order / Kwitansi" pada tabel Sheets Anda
                     if (columns.length > 1 && columns[1]) {
-                        const noFakturSheet = columns[1].replace(/^"(.*)"\$/, '\$1').trim().toLowerCase();
+                        const noFakturSheet = columns[1].replace(/^"(.*)"$/, '$1').trim().toLowerCase();
                         
                         if (noFakturSheet === inputFaktur) {
                             dataDitemukan = {
-                                tanggal: columns[0] ? columns[0].replace(/^"(.*)"\$/, '\$1').trim() : '-',
-                                no_faktur: columns[1] ? columns[1].replace(/^"(.*)"\$/, '\$1').trim() : '-',
-                                customer: columns[2] ? columns[2].replace(/^"(.*)"\$/, '\$1').trim() : '-',
-                                vin: columns[3] ? columns[3].replace(/^"(.*)"\$/, '\$1').trim() : '-',
-                                nama_part: columns[4] ? columns[4].replace(/^"(.*)"\$/, '\$1').trim() : '-',
-                                total: columns[5] ? columns[5].replace(/^"(.*)"\$/, '\$1').trim() : '0',
-                                status: columns[6] ? columns[6].replace(/^"(.*)"\$/, '\$1').trim().toUpperCase() : 'BELUM BAYAR'
+                                tanggal: columns[0] ? columns[0].replace(/^"(.*)"$/, '$1').trim() : '-',
+                                no_faktur: columns[1] ? columns[1].replace(/^"(.*)"$/, '$1').trim() : '-',
+                                customer: columns[2] ? columns[2].replace(/^"(.*)"$/, '$1').trim() : '-',
+                                vin: columns[3] ? columns[3].replace(/^"(.*)"$/, '$1').trim() : '-',
+                                nama_part: columns[4] ? columns[4].replace(/^"(.*)"$/, '$1').trim() : '-',
+                                total: columns[5] ? columns[5].replace(/^"(.*)"$/, '$1').trim() : '0',
+                                status: columns[6] ? columns[6].replace(/^"(.*)"$/, '$1').trim().toUpperCase() : 'BELUM BAYAR'
                             };
                             break;
                         }
@@ -156,15 +158,9 @@
                     `;
                 } else {
                     header.style.backgroundColor = "#6c757d"; header.style.color = "#fff";
-                    konten.innerHTML = `<span class="text-danger font-weight-bold"><i class="fas fa-times-circle mr-1"></i> Nomor Faktur "${document.getElementById('noFaktur').value}" tidak ditemukan!</span>`;
+                    konten.innerHTML = `<span class="text-danger font-weight-bold"><i class="fas fa-times-circle mr-1"></i> Nomor Faktur/JO "${document.getElementById('noFaktur').value}" tidak ditemukan di Google Sheets!</span>`;
                 }
             })
             .catch(err => {
                 btn.innerHTML = `Cari Data`; btn.disabled = false; box.classList.remove('d-none');
                 header.style.backgroundColor = "#343a40"; header.style.color = "#fff";
-                konten.innerHTML = `<span class="text-danger font-weight-bold"><i class="fas fa-exclamation-triangle mr-1"></i> Terjadi kendala memproses data online.</span>`;
-            });
-        });
-    </script>
-</body>
-</html>
