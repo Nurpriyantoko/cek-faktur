@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Portal Dev - Cek Faktur Terkini</title>
-    <!-- Memuat Bootstrap resmi via online agar tampilan terkunci rapi -->
+    <!-- Memuat link desain alternatif resmi via internet -->
     <link rel="stylesheet" href="https://jsdelivr.net">
     <link rel="stylesheet" href="https://cloudflare.com">
     <style>
@@ -23,7 +23,7 @@
 </head>
 <body>
 
-    <!-- 1. SIDEBAR MENU (SISI KIRI) -->
+    <!-- 1. SIDEBAR MENU SISI KIRI -->
     <div class="sidebar-container">
         <a class="sidebar-brand" href="#"><i class="fas fa-tools mr-2"></i>Part Counter</a>
         <hr class="border-light">
@@ -33,15 +33,15 @@
         </div>
     </div>
 
-    <!-- 2. KONTEN UTAMA (SISI KANAN) -->
+    <!-- 2. KONTEN UTAMA SISI KANAN -->
     <div class="main-content">
         <div class="topbar"></div>
         <div class="container-fluid">
             <h1 class="h3 mb-4 text-gray-800">Sistem Pengecekan Faktur <span class="badge badge-primary font-weight-normal text-xs ml-2"><i class="fas fa-sync-alt fa-spin mr-1"></i> Live Auto-Update</span></h1>
             
-            <!-- Kotak Formulir Input modern berbayang -->
+            <!-- Kotak Formulir Input Tebal & Modern -->
             <div class="card mb-4 col-lg-9 p-0">
-                <div class="card-header py-3"><h6 class="m-0 font-weight-bold text-primary">Cari Data Faktur Terkini</h6></div>
+                <div class="card-header py-3"><h6 class="m-0 font-weight-bold text-primary"><i class="fas fa-search mr-1"></i> Cari Data Faktur Terkini</h6></div>
                 <div class="card-body">
                     <form id="cekForm">
                         <div class="form-group row align-items-center">
@@ -57,20 +57,19 @@
                 </div>
             </div>
 
-            <!-- Kotak Tabel Hasil -->
+            <!-- Kotak Tabel Hasil Pencarian -->
             <div id="boxHasil" class="card mb-4 col-lg-9 p-0 d-none">
-                <div id="headerHasil" class="card-header py-3 text-white"><h6 class="m-0 font-weight-bold">Detail Data Ditemukan</h6></div>
+                <div id="headerHasil" class="card-header py-3 text-white"><h6 class="m-0 font-weight-bold" id="judulHasil">Detail Data Ditemukan</h6></div>
                 <div class="card-body text-dark" id="konten"></div>
             </div>
         </div>
     </div>
 
-    <!-- Memuat Javascript via Internet -->
+    <!-- Memuat Library Pendukung JavaScript -->
     <script src="https://cloudflare.com"></script>
     <script src="https://jsdelivr.net"></script>
 
     <script>
-        // Memastikan nama variabel sinkron LINK_CSV_ANDA
         const LINK_CSV_ANDA = "https://google.com";
 
         function parseCSVLine(text) {
@@ -101,23 +100,27 @@
                 const lines = csvText.split("\n");
                 let dataDitemukan = null;
 
+                // Membaca baris data (Dimulai dari baris ke-4 atau indeks 3 melewati judul spreadsheet)
                 for (let i = 3; i < lines.length; i++) {
                     if (!lines[i].trim()) continue;
                     
                     const columns = parseCSVLine(lines[i]);
                     
-                    if (columns.length > 1 && columns[1]) {
-                        const noFakturSheet = columns[1].replace(/^"(.*)"\$/, '\$1').trim().toLowerCase();
+                    // Kolom ke-4 (indeks 3) adalah kolom "No Faktur" asli pada spreadsheet Anda
+                    if (columns.length > 3 && columns[3]) {
+                        const noFakturSheet = columns[3].replace(/^"(.*)"$/, '$1').trim().toLowerCase();
                         
                         if (noFakturSheet === inputFaktur) {
                             dataDitemukan = {
-                                tanggal: columns[0] ? columns[0].replace(/^"(.*)"\$/, '\$1').trim() : '-',
-                                no_faktur: columns[1] ? columns[1].replace(/^"(.*)"\$/, '\$1').trim() : '-',
-                                customer: columns[2] ? columns[2].replace(/^"(.*)"\$/, '\$1').trim() : '-',
-                                vin: columns[3] ? columns[3].replace(/^"(.*)"\$/, '\$1').trim() : '-',
-                                nama_part: columns[4] ? columns[4].replace(/^"(.*)"\$/, '\$1').trim() : '-',
-                                total: columns[5] ? columns[5].replace(/^"(.*)"\$/, '\$1').trim() : '0',
-                                status: columns[6] ? columns[6].replace(/^"(.*)"\$/, '\$1').trim().toUpperCase() : 'BELUM BAYAR'
+                                tanggal: columns[1] ? columns[1].replace(/^"(.*)"$/, '$1').trim() : '-',
+                                customer: columns[2] ? columns[2].replace(/^"(.*)"$/, '$1').trim() : '-',
+                                no_faktur: columns[3] ? columns[3].replace(/^"(.*)"$/, '$1').trim() : '-',
+                                vin: columns[4] ? columns[4].replace(/^"(.*)"$/, '$1').trim() : '-',
+                                type: columns[5] ? columns[5].replace(/^"(.*)"$/, '$1').trim() : '-',
+                                kode_part: columns[6] ? columns[6].replace(/^"(.*)"$/, '$1').trim() : '-',
+                                nama_part: columns[7] ? columns[7].replace(/^"(.*)"$/, '$1').trim() : '-',
+                                total: columns[12] ? columns[12].replace(/^"(.*)"$/, '$1').trim() : '0',
+                                status: columns[14] ? columns[14].replace(/^"(.*)"$/, '$1').trim().toUpperCase() : 'BELUM BAYAR'
                             };
                             break;
                         }
@@ -130,6 +133,7 @@
 
                 if (dataDitemukan) {
                     let badgeColor = "badge-secondary";
+                    // Penentuan warna status berdasarkan isi teks database
                     if (dataDitemukan.status.includes("LUNAS")) {
                         header.style.backgroundColor = "#28a745"; header.style.color = "#fff";
                         badgeColor = "badge-success";
@@ -140,26 +144,16 @@
 
                     konten.innerHTML = `
                         <table class="table table-bordered text-dark mb-0">
-                            <tr><td width="35%"><strong>Tanggal Transaksi</strong></td><td>${dataDitemukan.tanggal}</td></tr>
-                            <tr><td><strong>No. Job Order / Kwitansi</strong></td><td>${dataDitemukan.no_faktur}</td></tr>
+                            <tr><td width="35%"><strong>Tanggal Faktur</strong></td><td>${dataDitemukan.tanggal}</td></tr>
+                            <tr><td><strong>No. Job Order / Faktur</strong></td><td><strong class="text-primary">${dataDitemukan.no_faktur}</strong></td></tr>
                             <tr><td><strong>Nama Customer</strong></td><td>${dataDitemukan.customer}</td></tr>
-                            <tr><td><strong>VIN Kendaraan</strong></td><td>${dataDitemukan.vin}</td></tr>
-                            <tr><td><strong>Nama Part / No Part</strong></td><td>${dataDitemukan.nama_part}</td></tr>
-                            <tr><td><strong>Total Tagihan</strong></td><td>Rp ${dataDitemukan.total}</td></tr>
-                            <tr><td><strong>Status Pembayaran</strong></td><td><span class="badge ${badgeColor} p-2">${dataDitemukan.status}</span></td></tr>
+                            <tr><td><strong>VIN No.</strong></td><td>${dataDitemukan.vin}</td></tr>
+                            <tr><td><strong>Type Unit</strong></td><td>${dataDitemukan.type}</td></tr>
+                            <tr><td><strong>Kode Part</strong></td><td>${dataDitemukan.kode_part}</td></tr>
+                            <tr><td><strong>Nama Part / Jasa</strong></td><td>${dataDitemukan.nama_part}</td></tr>
+                            <tr><td><strong>Total Tagihan</strong></td><td><strong>Rp ${dataDitemukan.total}</strong></td></tr>
+                            <tr><td><strong>Status Pembayaran</strong></td><td><span class="badge ${badgeColor} p-2 text-uppercase">${dataDitemukan.status}</span></td></tr>
                         </table>
                     `;
                 } else {
                     header.style.backgroundColor = "#6c757d"; header.style.color = "#fff";
-                    konten.innerHTML = `<span class="text-danger font-weight-bold"><i class="fas fa-times-circle mr-1"></i> Nomor Faktur "${document.getElementById('noFaktur').value}" tidak ditemukan di Google Sheets!</span>`;
-                }
-            })
-            .catch(err => {
-                btn.innerHTML = `Cari Data`; btn.disabled = false; box.classList.remove('d-none');
-                header.style.backgroundColor = "#343a40"; header.style.color = "#fff";
-                konten.innerHTML = `<span class="text-danger font-weight-bold"><i class="fas fa-exclamation-triangle mr-1"></i> Terjadi kesalahan memproses basis data online.</span>`;
-            });
-        });
-    </script>
-</body>
-</html>
