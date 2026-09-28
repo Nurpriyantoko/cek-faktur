@@ -4,69 +4,64 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Portal Dev - Cek Faktur Terkini</title>
-    <!-- Memuat Bootstrap dan ikon resmi langsung dari internet secara aman -->
+    <!-- Memuat link desain alternatif resmi -->
     <link rel="stylesheet" href="https://jsdelivr.net">
     <link rel="stylesheet" href="https://cloudflare.com">
     <style>
         body { font-family: 'Nunito', sans-serif; background-color: #f8f9fc; margin: 0; padding: 0; }
-        .sidebar-container { background: linear-gradient(180deg, #4e73df 10%, #224abe 100%); min-height: 100vh; padding: 1.5rem 1rem; color: #fff; }
+        .sidebar-container { background: linear-gradient(180deg, #4e73df 10%, #224abe 100%); min-height: 100vh; padding: 1.5rem 1rem; color: #fff; position: fixed; top: 0; left: 0; width: 220px; z-index: 1000; }
         .sidebar-brand { color: #fff; font-weight: 800; font-size: 1.2rem; text-decoration: none; text-transform: uppercase; display: block; text-align: center; margin-bottom: 1.5rem; }
         .sidebar-brand:hover { color: #fff; text-decoration: none; }
         .sidebar-heading { color: rgba(255,255,255,.4); font-size: .75rem; font-weight: 800; text-transform: uppercase; letter-spacing: .1rem; margin-bottom: 0.5rem; }
         .nav-link { color: rgba(255,255,255,.8); font-weight: 700; display: block; padding: .5rem 0; text-decoration: none; }
         .nav-link:hover, .nav-item.active .nav-link { color: #fff; text-decoration: none; }
-        .topbar { background-color: #fff; height: 4.375rem; margin-bottom: 2rem; box-shadow: 0 .15rem 1.75rem 0 rgba(58,59,69,.15); width: 100%; }
+        .main-content { margin-left: 220px; padding: 2rem; width: calc(100% - 220px); background-color: #f8f9fc; min-height: 100vh; }
+        .topbar { background-color: #fff; height: 4.375rem; margin-bottom: 2rem; box-shadow: 0 .15rem 1.75rem 0 rgba(58,59,69,.15); margin-top: -2rem; margin-left: -2rem; margin-right: -2rem; }
         .card { border: none; border-radius: .35rem; box-shadow: 0 .15rem 1.75rem 0 rgba(58,59,69,.15); background-color: #fff; }
         .card-header { background-color: #f8f9fc; border-bottom: 1px solid #e3e6f0; font-weight: 700; color: #4e73df; }
     </style>
 </head>
 <body>
 
-    <div class="container-fluid p-0">
-        <div class="row no-gutters">
+    <!-- 1. SIDEBAR MENU (SISI KIRI) -->
+    <div class="sidebar-container">
+        <a class="sidebar-brand" href="#"><i class="fas fa-tools mr-2"></i>Part Counter</a>
+        <hr class="border-light">
+        <div class="sidebar-heading">Menu Utama</div>
+        <div class="nav-item active">
+            <a class="nav-link" href="#"><i class="fas fa-search mr-2"></i>Cek Faktur</a>
+        </div>
+    </div>
+
+    <!-- 2. KONTEN UTAMA (SISI KANAN) -->
+    <div class="main-content">
+        <div class="topbar"></div>
+        <div class="container-fluid">
+            <h1 class="h3 mb-4 text-gray-800">Sistem Pengecekan Faktur <span class="badge badge-primary font-weight-normal text-xs ml-2"><i class="fas fa-sync-alt fa-spin mr-1"></i> Live Auto-Update</span></h1>
             
-            <!-- 1. SIDEBAR MENU (SISI KIRI - LEBAR 2 KOLOM) -->
-            <div class="col-md-2 sidebar-container">
-                <a class="sidebar-brand" href="#"><i class="fas fa-tools mr-2"></i>Part Counter</a>
-                <hr class="border-light">
-                <div class="sidebar-heading">Menu Utama</div>
-                <div class="nav-item active">
-                    <a class="nav-link" href="#"><i class="fas fa-search mr-2"></i>Cek Faktur</a>
-                </div>
-            </div>
-
-            <!-- 2. AREA KONTEN PENCARIAN (SISI KANAN - LEBAR 10 KOLOM) -->
-            <div class="col-md-10 d-flex flex-column bg-light">
-                <div class="topbar"></div>
-                <div class="container-fluid px-4">
-                    <h1 class="h3 mb-4 text-gray-800">Sistem Pengecekan Faktur <span class="badge badge-primary font-weight-normal text-xs ml-2"><i class="fas fa-sync-alt fa-spin mr-1"></i> Live Auto-Update</span></h1>
-                    
-                    <!-- Kotak Formulir Input Pencarian -->
-                    <div class="card mb-4 col-lg-8 p-0">
-                        <div class="card-header py-3">Cari Data Faktur Terkini</div>
-                        <div class="card-body">
-                            <form id="cekForm">
-                                <div class="form-group row align-items-center">
-                                    <label class="col-sm-3 font-weight-bold text-dark mb-0">Nomor Faktur / JO</label>
-                                    <div class="col-sm-9">
-                                        <input type="text" class="form-control" id="noFaktur" placeholder="Masukkan Nomor Faktur / JO..." required>
-                                    </div>
-                                </div>
-                                <div class="text-right mt-3">
-                                    <button type="submit" id="btnCari" class="btn btn-primary px-5 shadow-sm">Cari Data</button>
-                                </div>
-                            </form>
+            <!-- Kotak Formulir Input -->
+            <div class="card mb-4 col-lg-9 p-0">
+                <div class="card-header py-3">Cari Data Faktur Terkini</div>
+                <div class="card-body">
+                    <form id="cekForm">
+                        <div class="form-group row align-items-center">
+                            <label class="col-sm-3 font-weight-bold text-dark mb-0">Nomor Faktur / JO</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" id="noFaktur" placeholder="Masukkan Nomor Faktur / JO..." required>
+                            </div>
                         </div>
-                    </div>
-
-                    <!-- Kotak Tabel Hasil Data Ditemukan -->
-                    <div id="boxHasil" class="card mb-4 col-lg-8 p-0 d-none">
-                        <div id="headerHasil" class="card-header py-3 text-white">Detail Data Ditemukan</div>
-                        <div class="card-body text-dark" id="konten"></div>
-                    </div>
+                        <div class="text-right mt-3">
+                            <button type="submit" id="btnCari" class="btn btn-primary px-5 shadow-sm">Cari Data</button>
+                        </div>
+                    </form>
                 </div>
             </div>
 
+            <!-- Kotak Tabel Hasil -->
+            <div id="boxHasil" class="card mb-4 col-lg-9 p-0 d-none">
+                <div id="headerHasil" class="card-header py-3 text-white">Detail Data Ditemukan</div>
+                <div class="card-body text-dark" id="konten"></div>
+            </div>
         </div>
     </div>
 
@@ -75,9 +70,8 @@
     <script src="https://jsdelivr.net"></script>
 
     <script>
-        const LINK_CSV_AND = "https://google.com";
+        const LINK_CSV_ANDA = "https://google.com";
 
-        // Fungsi pembaca data CSV Google Sheets yang mendukung koma (,) dan titik koma (;)
         function parseCSVLine(text) {
             let p = '', r = []; let q = false;
             for (let i = 0; i < text.length; i++) {
@@ -100,31 +94,29 @@
             btn.innerHTML = `<i class="fas fa-spinner fa-spin mr-2"></i>Mencari...`;
             btn.disabled = true;
 
-            fetch(LINK_CSV_AND)
+            fetch(LINK_CSV_ANDA)
             .then(res => res.text())
             .then(csvText => {
                 const lines = csvText.split("\n");
                 let dataDitemukan = null;
 
-                // Loop membaca baris data spreadsheet (melewati 3 baris header kosong teratas)
                 for (let i = 3; i < lines.length; i++) {
                     if (!lines[i].trim()) continue;
                     
                     const columns = parseCSVLine(lines[i]);
                     
-                    // Membaca Kolom ke-2 (indeks 1) yaitu Nomor Job Order / Kwitansi
                     if (columns.length > 1 && columns[1]) {
-                        const noFakturSheet = columns[1].replace(/^"(.*)"$/, '$1').trim().toLowerCase();
+                        const noFakturSheet = columns[1].replace(/^"(.*)"\$/, '\$1').trim().toLowerCase();
                         
                         if (noFakturSheet === inputFaktur) {
                             dataDitemukan = {
-                                tanggal: columns[0] ? columns[0].replace(/^"(.*)"$/, '$1').trim() : '-',
-                                no_faktur: columns[1] ? columns[1].replace(/^"(.*)"$/, '$1').trim() : '-',
-                                customer: columns[2] ? columns[2].replace(/^"(.*)"$/, '$1').trim() : '-',
-                                vin: columns[3] ? columns[3].replace(/^"(.*)"$/, '$1').trim() : '-',
-                                nama_part: columns[4] ? columns[4].replace(/^"(.*)"$/, '$1').trim() : '-',
-                                total: columns[5] ? columns[5].replace(/^"(.*)"$/, '$1').trim() : '0',
-                                status: columns[6] ? columns[6].replace(/^"(.*)"$/, '$1').trim().toUpperCase() : 'BELUM BAYAR'
+                                tanggal: columns[0] ? columns[0].replace(/^"(.*)"\$/, '\$1').trim() : '-',
+                                no_faktur: columns[1] ? columns[1].replace(/^"(.*)"\$/, '\$1').trim() : '-',
+                                customer: columns[2] ? columns[2].replace(/^"(.*)"\$/, '\$1').trim() : '-',
+                                vin: columns[3] ? columns[3].replace(/^"(.*)"\$/, '\$1').trim() : '-',
+                                nama_part: columns[4] ? columns[4].replace(/^"(.*)"\$/, '\$1').trim() : '-',
+                                total: columns[5] ? columns[5].replace(/^"(.*)"\$/, '\$1').trim() : '0',
+                                status: columns[6] ? columns[6].replace(/^"(.*)"\$/, '\$1').trim().toUpperCase() : 'BELUM BAYAR'
                             };
                             break;
                         }
@@ -164,3 +156,9 @@
             .catch(err => {
                 btn.innerHTML = `Cari Data`; btn.disabled = false; box.classList.remove('d-none');
                 header.style.backgroundColor = "#343a40"; header.style.color = "#fff";
+                konten.innerHTML = `<span class="text-danger font-weight-bold"><i class="fas fa-exclamation-triangle mr-1"></i> Terjadi kendala sistem memproses basis data.</span>`;
+            });
+        });
+    </script>
+</body>
+</html>
