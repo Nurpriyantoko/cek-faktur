@@ -4,18 +4,20 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Portal Dev - Cek Faktur Terkini</title>
-    <!-- Memuat link desain resmi Bootstrap via online -->
+    <!-- Memuat link desain resmi Bootstrap dan FontAwesome via online -->
     <link rel="stylesheet" href="https://jsdelivr.net">
     <link rel="stylesheet" href="https://cloudflare.com">
     <style>
         body { font-family: 'Nunito', sans-serif; background-color: #f8f9fc; margin: 0; padding: 0; }
-        .sidebar-container { background: linear-gradient(180deg, #4e73df 10%, #224abe 100%); min-height: 100vh; padding: 1.5rem 1rem; color: #fff; position: fixed; top: 0; left: 0; width: 220px; z-index: 1000; }
+        .sidebar-container { background: linear-gradient(180deg, #4e73df 10%, #224abe 100%); min-height: 100vh; padding: 1.5rem 1rem; color: #fff; position: fixed; top: 0; left: 0; width: 240px; z-index: 1000; }
         .sidebar-brand { color: #fff; font-weight: 800; font-size: 1.2rem; text-decoration: none; text-transform: uppercase; display: block; text-align: center; margin-bottom: 1.5rem; }
         .sidebar-brand:hover { color: #fff; text-decoration: none; }
         .sidebar-heading { color: rgba(255,255,255,.4); font-size: .75rem; font-weight: 800; text-transform: uppercase; letter-spacing: .1rem; margin-bottom: 0.5rem; }
-        .nav-link { color: rgba(255,255,255,.8); font-weight: 700; display: block; padding: .5rem 0; text-decoration: none; }
-        .nav-link:hover, .nav-item.active .nav-link { color: #fff; text-decoration: none; }
-        .main-content { margin-left: 220px; padding: 2rem; width: calc(100% - 220px); background-color: #f8f9fc; min-height: 100vh; }
+        .nav-item { margin-bottom: 0.5rem; }
+        .nav-link { color: rgba(255,255,255,.8); font-weight: 700; display: block; padding: .6rem .8rem; text-decoration: none; border-radius: 0.35rem; }
+        .nav-link:hover { color: #fff; background-color: rgba(255, 255, 255, 0.1); text-decoration: none; }
+        .nav-item.active .nav-link { color: #fff; background-color: rgba(255, 255, 255, 0.15); }
+        .main-content { margin-left: 240px; padding: 2rem; width: calc(100% - 240px); background-color: #f8f9fc; min-height: 100vh; }
         .topbar { background-color: #fff; height: 4.375rem; margin-bottom: 2rem; box-shadow: 0 .15rem 1.75rem 0 rgba(58,59,69,.15); margin-top: -2rem; margin-left: -2rem; margin-right: -2rem; }
         .card { border: none; border-radius: .35rem; box-shadow: 0 .15rem 1.75rem 0 rgba(58,59,69,.15); background-color: #fff; }
         .card-header { background-color: #f8f9fc; border-bottom: 1px solid #e3e6f0; font-weight: 700; color: #4e73df; }
@@ -23,17 +25,29 @@
 </head>
 <body>
 
-    <!-- 1. SIDEBAR MENU SISI KIRI -->
+    <!-- 1. SIDEBAR MENU SISI KIRI (SUDAH DITAMBAH KOLOM BARU) -->
     <div class="sidebar-container">
         <a class="sidebar-brand" href="#"><i class="fas fa-tools mr-2"></i>Part Counter</a>
         <hr class="border-light">
         <div class="sidebar-heading">Menu Utama</div>
+        
+        <!-- Kolom Menu 1: Cek Faktur (Aktif) -->
         <div class="nav-item active">
             <a class="nav-link" href="#"><i class="fas fa-search mr-2"></i>Cek Faktur</a>
         </div>
+        
+        <!-- Kolom Menu 2: Laporan Order Sparepart (Baru) -->
+        <div class="nav-item">
+            <a class="nav-link" href="#"><i class="fas fa-file-alt mr-2"></i>Laporan Order</a>
+        </div>
+        
+        <!-- Kolom Menu 3: Riwayat Transaksi (Baru) -->
+        <div class="nav-item">
+            <a class="nav-link" href="#"><i class="fas fa-history mr-2"></i>Riwayat Transaksi</a>
+        </div>
     </div>
 
-    <!-- 2. KONTEN UTAMA SISI KANAN -->
+    <!-- 2. AREA UTAMA SISI KANAN -->
     <div class="main-content">
         <div class="topbar"></div>
         <div class="container-fluid">
@@ -57,7 +71,7 @@
                 </div>
             </div>
 
-            <!-- Kotak Tabel Hasil Pencarian -->
+            <!-- Kotak Tabel Hasil Pengecekan -->
             <div id="boxHasil" class="card mb-4 col-lg-9 p-0 d-none">
                 <div id="headerHasil" class="card-header py-3 text-white"><h6 class="m-0 font-weight-bold">Detail Data Ditemukan</h6></div>
                 <div class="card-body text-dark" id="konten"></div>
@@ -65,7 +79,7 @@
         </div>
     </div>
 
-    <!-- Library JavaScript -->
+    <!-- Library JavaScript Pendukung -->
     <script src="https://cloudflare.com"></script>
     <script src="https://jsdelivr.net"></script>
 
@@ -73,8 +87,7 @@
         const LINK_CSV_ANDA = "https://google.com";
 
         document.getElementById('cekForm').addEventListener('submit', function(e) {
-            // KUNCI UTAMA: Menghentikan browser agar tidak melakukan refresh halaman otomatis
-            e.preventDefault();
+            e.preventDefault(); // Mengunci agar halaman tidak me-refresh otomatis
             
             const inputFaktur = document.getElementById('noFaktur').value.trim().toLowerCase();
             const box = document.getElementById('boxHasil');
@@ -97,13 +110,9 @@
                     let baris = lines[i].trim();
                     if (!baris) continue;
                     
-                    // Memecah baris menggunakan tanda titik koma (;) khas regional Excel/Sheets Indonesia
                     let columns = baris.split(";");
-                    
-                    // Menghilangkan tanda kutip pembungkus data jika ada
-                    columns = columns.map(col => col.replace(/^"(.*)"\$/, '\$1').trim());
+                    columns = columns.map(col => col.replace(/^"(.*)"$/, '$1').trim());
 
-                    // Kolom ke-4 (indeks 3) adalah kolom "No Faktur / JO" asli spreadsheet Anda
                     if (columns.length > 3) {
                         let noFakturSheet = columns[3].toLowerCase();
                         
@@ -112,12 +121,12 @@
                                 tanggal: columns[0] || '-',
                                 customer: columns[1] || '-',
                                 no_faktur: columns[3] || '-',
-                                vin: columns[4] || '-',
-                                type: columns[5] || '-',
-                                kode_part: columns[6] || '-',
-                                nama_part: columns[7] || '-',
-                                total: columns[11] || '0',
-                                status: (columns[13] || 'BELUM BAYAR').toUpperCase()
+                                vin: columns[2] || '-',
+                                type: columns[4] || '-',
+                                kode_part: columns[5] || '-',
+                                nama_part: columns[6] || '-',
+                                total: columns[7] || '0',
+                                status: (columns[8] || 'BELUM BAYAR').toUpperCase()
                             };
                             break;
                         }
@@ -157,11 +166,3 @@
                 }
             })
             .catch(err => {
-                btn.innerHTML = `Cari Data`; btn.disabled = false; box.classList.remove('d-none');
-                header.style.backgroundColor = "#343a40"; header.style.color = "#fff";
-                konten.innerHTML = `<span class="text-danger font-weight-bold"><i class="fas fa-exclamation-triangle mr-1"></i> Terjadi kesalahan memproses basis data online.</span>`;
-            });
-        });
-    </script>
-</body>
-</html>
