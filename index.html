@@ -3,8 +3,8 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Portal Dev - SPK TO DO 2025</title>
-    <!-- Memuat framework CSS Bootstrap resmi -->
+    <title>Portal Dev - Part Counter</title>
+    <!-- Memuat link desain resmi Bootstrap dan FontAwesome via online -->
     <link rel="stylesheet" href="https://jsdelivr.net">
     <link rel="stylesheet" href="https://cloudflare.com">
     <style>
@@ -30,26 +30,29 @@
         <a class="sidebar-brand" href="#"><i class="fas fa-tools mr-2"></i>Part Counter</a>
         <hr class="border-light">
         <div class="sidebar-heading">Menu Utama</div>
-        <div class="nav-item active"><a class="nav-link" href="#"><i class="fas fa-search mr-2"></i>Cek Faktur / SPK</a></div>
-        <div class="nav-item"><a class="nav-link" href="#" onclick="alert('Halaman Laporan Order sedang disiapkan!')"><i class="fas fa-file-alt mr-2"></i>Laporan Order</a></div>
-        <div class="nav-item"><a class="nav-link" href="#" onclick="alert('Halaman Riwayat sedang disiapkan!')"><i class="fas fa-history mr-2"></i>Riwayat Transaksi</a></div>
+        
+        <!-- Semua menu diarahkan ke sistem pencarian SPK yang sama agar tidak bingung -->
+        <div class="nav-item active"><a class="nav-link" href="#"><i class="fas fa-search mr-2"></i>Cek Faktur</a></div>
+        <div class="nav-item"><a class="nav-link" href="#"><i class="fas fa-clipboard-list mr-2"></i>SPK TO DO 2025</a></div>
+        <div class="nav-item"><a class="nav-link" href="#"><i class="fas fa-file-invoice mr-2"></i>Laporan Order</a></div>
+        <div class="nav-item"><a class="nav-link" href="#"><i class="fas fa-history mr-2"></i>Riwayat Transaksi</a></div>
     </div>
 
-    <!-- 2. KONTEN UTAMA SISI KANAN -->
+    <!-- 2. AREA UTAMA SISI KANAN -->
     <div class="main-content">
         <div class="topbar"></div>
         <div class="container-fluid">
-            <h1 class="h3 mb-4 text-gray-800">Sistem Pengecekan SPK <span class="badge badge-primary font-weight-normal text-xs ml-2"><i class="fas fa-sync-alt fa-spin mr-1"></i> Live Auto-Update</span></h1>
+            <h1 class="h3 mb-4 text-gray-800">Sistem Pengecekan SPK / Faktur <span class="badge badge-primary font-weight-normal text-xs ml-2"><i class="fas fa-sync-alt fa-spin mr-1"></i> Live Auto-Update</span></h1>
             
-            <!-- Kotak Pencarian Rapi -->
+            <!-- Kotak Formulir Input Pencarian Modern -->
             <div class="card mb-4 col-lg-9 p-0">
-                <div class="card-header py-3"><h6 class="m-0 font-weight-bold text-primary"><i class="fas fa-search mr-1"></i> Cari Data SPK Terkini</h6></div>
+                <div class="card-header py-3"><h6 class="m-0 font-weight-bold text-primary"><i class="fas fa-search mr-1"></i> Cari Data SPK / Faktur Terkini</h6></div>
                 <div class="card-body">
                     <form id="cekForm">
                         <div class="form-group row align-items-center">
-                            <label class="col-sm-3 font-weight-bold text-dark mb-0">Nomor SPK</label>
+                            <label class="col-sm-3 font-weight-bold text-dark mb-0">Nomor SPK / JO</label>
                             <div class="col-sm-9">
-                                <input type="text" class="form-control" id="noFaktur" placeholder="Masukkan Nomor SPK (Contoh: X526-0113)" required>
+                                <input type="text" class="form-control" id="noFaktur" placeholder="Contoh: X526-0113" required>
                             </div>
                         </div>
                         <div class="text-right mt-3">
@@ -59,19 +62,20 @@
                 </div>
             </div>
 
-            <!-- Kotak Tabel Hasil -->
+            <!-- Kotak Tabel Hasil Pengecekan -->
             <div id="boxHasil" class="card mb-4 col-lg-9 p-0 d-none">
-                <div id="headerHasil" class="card-header py-3 text-white"><h6 class="m-0 font-weight-bold">Detail Informasi SPK Ditemukan</h6></div>
+                <div id="headerHasil" class="card-header py-3 text-white"><h6 class="m-0 font-weight-bold">Detail Data SPK Ditemukan</h6></div>
                 <div class="card-body text-dark" id="konten"></div>
             </div>
         </div>
     </div>
 
+    <!-- Library JavaScript Pendukung -->
     <script src="https://cloudflare.com"></script>
     <script src="https://jsdelivr.net"></script>
 
     <script>
-        // TEMPELKAN LINK CSV BARU ANDA YANG DIALURKAN DARI LANGKAH 1 DI BAWAH INI:
+        // PENTING: Ganti link di bawah ini dengan Link CSV hasil "Publikasikan ke Web" dari Google Sheets SPK Baru Anda!
         const LINK_CSV_ANDA = "https://google.com";
 
         function parseCSVLine(text) {
@@ -86,12 +90,15 @@
         }
 
         document.getElementById('cekForm').addEventListener('submit', function(e) {
-            e.preventDefault();
+            e.preventDefault(); // Mengunci halaman agar tidak me-refresh otomatis
+            
             const inputFaktur = document.getElementById('noFaktur').value.trim().toLowerCase();
             const box = document.getElementById('boxHasil');
             const header = document.getElementById('headerHasil');
             const konten = document.getElementById('konten');
             const btn = document.getElementById('btnCari');
+
+            if (!inputFaktur) return;
 
             btn.innerHTML = `<i class="fas fa-spinner fa-spin mr-2"></i>Mencari...`;
             btn.disabled = true;
@@ -102,7 +109,7 @@
                 const lines = csvText.split("\n");
                 let dataDitemukan = null;
 
-                // Loop membaca baris data (Melewati baris header)
+                // Loop membaca baris data (Mulai dari indeks ke-3 untuk melewati header atas)
                 for (let i = 3; i < lines.length; i++) {
                     let baris = lines[i].trim();
                     if (!baris) continue;
@@ -110,14 +117,12 @@
                     let columns = parseCSVLine(baris);
                     columns = columns.map(col => col.replace(/^"(.*)"$/, '$1').trim());
 
-                    // Membaca Kolom E (indeks 4) sebagai Kolom "NO.SPK" utama database baru Anda
+                    // Kolom ke-5 (indeks 4) pada Google Sheets Anda adalah kolom "NO. SPK"
                     if (columns.length > 4) {
                         let noSpkSheet = columns[4].toLowerCase();
                         
                         if (noSpkSheet === inputFaktur) {
                             dataDitemukan = {
-                                no: columns[0] || '-',
-                                spv: columns[1] || '-',
                                 sales: columns[2] || '-',
                                 customer: columns[3] || '-',
                                 no_spk: columns[4] || '-',
@@ -126,8 +131,7 @@
                                 type: columns[7] || '-',
                                 ext: columns[8] || '-',
                                 int: columns[9] || '-',
-                                chs: columns[13] || '-', // Kolom OTR
-                                booking: columns[14] || '-' // Kolom Booking
+                                OTR: columns[13] || 'Rp 0'
                             };
                             break;
                         }
@@ -139,23 +143,22 @@
                 btn.disabled = false;
 
                 if (dataDitemukan) {
-                    header.style.backgroundColor = "#28a745"; header.style.color = "#fff";
+                    header.style.backgroundColor = "#28a745"; // Warna Hijau Sukses
+                    header.style.color = "#fff";
+
                     konten.innerHTML = `
                         <table class="table table-bordered text-dark mb-0">
                             <tr><td width="35%"><strong>Nomor SPK</strong></td><td><strong class="text-primary">${dataDitemukan.no_spk}</strong></td></tr>
                             <tr><td><strong>Tanggal SPK</strong></td><td>${dataDitemukan.tgl_spk}</td></tr>
                             <tr><td><strong>Nama Customer</strong></td><td><strong>${dataDitemukan.customer}</strong></td></tr>
-                            <tr><td><strong>Nama Sales / SPV</strong></td><td>${dataDitemukan.sales} / ${dataDitemukan.spv}</td></tr>
-                            <tr><td><strong>Type Unit Kendaraan</strong></td><td>${dataDitemukan.type}</td></tr>
+                            <tr><td><strong>Nama Sales</strong></td><td>${dataDitemukan.sales}</td></tr>
+                            <tr><td><strong>Type Unit</strong></td><td>${dataDitemukan.type}</td></tr>
                             <tr><td><strong>VIN / No. Rangka</strong></td><td>${dataDitemukan.vin}</td></tr>
                             <tr><td><strong>Warna (Ext / Int)</strong></td><td>${dataDitemukan.ext} / ${dataDitemukan.int}</td></tr>
-                            <tr><td><strong>Nilai OTR</strong></td><td><strong class="text-success">${dataDitemukan.chs}</strong></td></tr>
-                            <tr><td><strong>Booking Fee</strong></td><td>${dataDitemukan.booking}</td></tr>
+                            <tr><td><strong>Harga OTR</strong></td><td><strong class="text-success">${dataDitemukan.OTR}</strong></td></tr>
                         </table>
                     `;
                 } else {
                     header.style.backgroundColor = "#6c757d"; header.style.color = "#fff";
-                    konten.innerHTML = `<span class="text-danger font-weight-bold"><i class="fas fa-times-circle mr-1"></i> Nomor SPK "${document.getElementById('noFaktur').value}" tidak ditemukan di lembar SPK 2026!</span>`;
+                    konten.innerHTML = `<span class="text-danger font-weight-bold"><i class="fas fa-times-circle mr-1"></i> Nomor SPK "${document.getElementById('noFaktur').value}" tidak ditemukan di database SPK 2026!</span>`;
                 }
-            })
-            .catch(err => {
