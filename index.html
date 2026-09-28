@@ -39,9 +39,9 @@
         <div class="container-fluid">
             <h1 class="h3 mb-4 text-gray-800">Sistem Pengecekan Faktur <span class="badge badge-primary font-weight-normal text-xs ml-2"><i class="fas fa-sync-alt fa-spin mr-1"></i> Live Auto-Update</span></h1>
             
-            <!-- Kotak Formulir Input -->
+            <!-- Kotak Formulir Input modern berbayang -->
             <div class="card mb-4 col-lg-9 p-0">
-                <div class="card-header py-3">Cari Data Faktur Terkini</div>
+                <div class="card-header py-3"><h6 class="m-0 font-weight-bold text-primary">Cari Data Faktur Terkini</h6></div>
                 <div class="card-body">
                     <form id="cekForm">
                         <div class="form-group row align-items-center">
@@ -59,7 +59,7 @@
 
             <!-- Kotak Tabel Hasil -->
             <div id="boxHasil" class="card mb-4 col-lg-9 p-0 d-none">
-                <div id="headerHasil" class="card-header py-3 text-white">Detail Data Ditemukan</div>
+                <div id="headerHasil" class="card-header py-3 text-white"><h6 class="m-0 font-weight-bold">Detail Data Ditemukan</h6></div>
                 <div class="card-body text-dark" id="konten"></div>
             </div>
         </div>
@@ -70,7 +70,7 @@
     <script src="https://jsdelivr.net"></script>
 
     <script>
-        // Koreksi nama variabel: Diperbaiki menjadi LINK_CSV_ANDA agar sinkron
+        // Memastikan nama variabel sinkron LINK_CSV_ANDA
         const LINK_CSV_ANDA = "https://google.com";
 
         function parseCSVLine(text) {
