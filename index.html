@@ -3,8 +3,8 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Portal Dev - Part Counter</title>
-    <!-- Memuat link desain resmi Bootstrap dan FontAwesome via online -->
+    <title>Portal Dev - SPK TO DO 2025</title>
+    <!-- Memuat framework CSS Bootstrap resmi -->
     <link rel="stylesheet" href="https://jsdelivr.net">
     <link rel="stylesheet" href="https://cloudflare.com">
     <style>
@@ -25,48 +25,31 @@
 </head>
 <body>
 
-    <!-- 1. SIDEBAR MENU SISI KIRI (SUDAH DITAMBAH MENU BARU DI BAWAH CEK FAKTUR) -->
+    <!-- 1. SIDEBAR MENU SISI KIRI -->
     <div class="sidebar-container">
         <a class="sidebar-brand" href="#"><i class="fas fa-tools mr-2"></i>Part Counter</a>
         <hr class="border-light">
-        
         <div class="sidebar-heading">Menu Utama</div>
-        <!-- Kolom Menu 1: Cek Faktur (Aktif) -->
-        <div class="nav-item active">
-            <a class="nav-link" href="#"><i class="fas fa-search mr-2"></i>Cek Faktur</a>
-        </div>
-        
-        <!-- Kolom Menu 2: SPK TO DO 2025 (Baru - Sesuai Nama File Gambar Anda) -->
-        <div class="nav-item">
-            <a class="nav-link" href="#" onclick="alert('Halaman SPK TO DO sedang disiapkan!')"><i class="fas fa-clipboard-list mr-2"></i>SPK TO DO 2025</a>
-        </div>
-        
-        <!-- Kolom Menu 3: Laporan Order Sparepart (Baru) -->
-        <div class="nav-item">
-            <a class="nav-link" href="#" onclick="alert('Halaman Laporan Order sedang disiapkan!')"><i class="fas fa-file-invoice mr-2"></i>Laporan Order</a>
-        </div>
-        
-        <!-- Kolom Menu 4: Riwayat Transaksi (Baru) -->
-        <div class="nav-item">
-            <a class="nav-link" href="#" onclick="alert('Halaman Riwayat sedang disiapkan!')"><i class="fas fa-history mr-2"></i>Riwayat Transaksi</a>
-        </div>
+        <div class="nav-item active"><a class="nav-link" href="#"><i class="fas fa-search mr-2"></i>Cek Faktur / SPK</a></div>
+        <div class="nav-item"><a class="nav-link" href="#" onclick="alert('Halaman Laporan Order sedang disiapkan!')"><i class="fas fa-file-alt mr-2"></i>Laporan Order</a></div>
+        <div class="nav-item"><a class="nav-link" href="#" onclick="alert('Halaman Riwayat sedang disiapkan!')"><i class="fas fa-history mr-2"></i>Riwayat Transaksi</a></div>
     </div>
 
-    <!-- 2. AREA KONTEN UTAMA SISI KANAN -->
+    <!-- 2. KONTEN UTAMA SISI KANAN -->
     <div class="main-content">
         <div class="topbar"></div>
         <div class="container-fluid">
-            <h1 class="h3 mb-4 text-gray-800">Sistem Pengecekan Faktur / SPK <span class="badge badge-primary font-weight-normal text-xs ml-2"><i class="fas fa-sync-alt fa-spin mr-1"></i> Live Auto-Update</span></h1>
+            <h1 class="h3 mb-4 text-gray-800">Sistem Pengecekan SPK <span class="badge badge-primary font-weight-normal text-xs ml-2"><i class="fas fa-sync-alt fa-spin mr-1"></i> Live Auto-Update</span></h1>
             
-            <!-- Kotak Formulir Input Pencarian -->
+            <!-- Kotak Pencarian Rapi -->
             <div class="card mb-4 col-lg-9 p-0">
-                <div class="card-header py-3"><h6 class="m-0 font-weight-bold text-primary"><i class="fas fa-search mr-1"></i> Cari Data SPK / Faktur Terkini</h6></div>
+                <div class="card-header py-3"><h6 class="m-0 font-weight-bold text-primary"><i class="fas fa-search mr-1"></i> Cari Data SPK Terkini</h6></div>
                 <div class="card-body">
                     <form id="cekForm">
                         <div class="form-group row align-items-center">
-                            <label class="col-sm-3 font-weight-bold text-dark mb-0">Nomor SPK / JO</label>
+                            <label class="col-sm-3 font-weight-bold text-dark mb-0">Nomor SPK</label>
                             <div class="col-sm-9">
-                                <input type="text" class="form-control" id="noFaktur" placeholder="Contoh: X526-0113" required>
+                                <input type="text" class="form-control" id="noFaktur" placeholder="Masukkan Nomor SPK (Contoh: X526-0113)" required>
                             </div>
                         </div>
                         <div class="text-right mt-3">
@@ -76,20 +59,19 @@
                 </div>
             </div>
 
-            <!-- Kotak Tabel Hasil Pengecekan -->
+            <!-- Kotak Tabel Hasil -->
             <div id="boxHasil" class="card mb-4 col-lg-9 p-0 d-none">
-                <div id="headerHasil" class="card-header py-3 text-white"><h6 class="m-0 font-weight-bold">Detail Data SPK Ditemukan</h6></div>
+                <div id="headerHasil" class="card-header py-3 text-white"><h6 class="m-0 font-weight-bold">Detail Informasi SPK Ditemukan</h6></div>
                 <div class="card-body text-dark" id="konten"></div>
             </div>
         </div>
     </div>
 
-    <!-- Library JavaScript Pendukung -->
     <script src="https://cloudflare.com"></script>
     <script src="https://jsdelivr.net"></script>
 
     <script>
-        // Link CSV Google Sheets Anda yang mengarah ke data "SPK 2026"
+        // TEMPELKAN LINK CSV BARU ANDA YANG DIALURKAN DARI LANGKAH 1 DI BAWAH INI:
         const LINK_CSV_ANDA = "https://google.com";
 
         function parseCSVLine(text) {
@@ -104,15 +86,12 @@
         }
 
         document.getElementById('cekForm').addEventListener('submit', function(e) {
-            e.preventDefault(); // Mengunci agar halaman tidak me-refresh otomatis
-            
+            e.preventDefault();
             const inputFaktur = document.getElementById('noFaktur').value.trim().toLowerCase();
             const box = document.getElementById('boxHasil');
             const header = document.getElementById('headerHasil');
             const konten = document.getElementById('konten');
             const btn = document.getElementById('btnCari');
-
-            if (!inputFaktur) return;
 
             btn.innerHTML = `<i class="fas fa-spinner fa-spin mr-2"></i>Mencari...`;
             btn.disabled = true;
@@ -123,7 +102,7 @@
                 const lines = csvText.split("\n");
                 let dataDitemukan = null;
 
-                // Loop membaca baris data (Mulai dari indeks ke-3 untuk melewati header)
+                // Loop membaca baris data (Melewati baris header)
                 for (let i = 3; i < lines.length; i++) {
                     let baris = lines[i].trim();
                     if (!baris) continue;
@@ -131,24 +110,24 @@
                     let columns = parseCSVLine(baris);
                     columns = columns.map(col => col.replace(/^"(.*)"$/, '$1').trim());
 
-                    // Berdasarkan Foto Google Sheets Anda: Kolom NO.SPK ada di Kolom ke-4 (indeks 3)
-                    if (columns.length > 3) {
-                        let noSpkSheet = columns[3].toLowerCase();
+                    // Membaca Kolom E (indeks 4) sebagai Kolom "NO.SPK" utama database baru Anda
+                    if (columns.length > 4) {
+                        let noSpkSheet = columns[4].toLowerCase();
                         
                         if (noSpkSheet === inputFaktur) {
                             dataDitemukan = {
+                                no: columns[0] || '-',
+                                spv: columns[1] || '-',
                                 sales: columns[2] || '-',
-                                customer: columns[1] || '-',
-                                no_spk: columns[3] || '-',
-                                tgl_spk: columns[4] || '-',
-                                vin: columns[5] || '-',
-                                type: columns[6] || '-',
-                                exterior: columns[7] || '-',
-                                interior: columns[8] || '-',
-                                nogin: columns[9] || '-',
-                                noka: columns[10] || '-',
-                                source: columns[11] || '-',
-                                otr: columns[14] || 'Rp 0'
+                                customer: columns[3] || '-',
+                                no_spk: columns[4] || '-',
+                                tgl_spk: columns[5] || '-',
+                                vin: columns[6] || '-',
+                                type: columns[7] || '-',
+                                ext: columns[8] || '-',
+                                int: columns[9] || '-',
+                                chs: columns[13] || '-', // Kolom OTR
+                                booking: columns[14] || '-' // Kolom Booking
                             };
                             break;
                         }
@@ -160,14 +139,23 @@
                 btn.disabled = false;
 
                 if (dataDitemukan) {
-                    header.style.backgroundColor = "#28a745"; // Warna Hijau Sukses
-                    header.style.color = "#fff";
-
+                    header.style.backgroundColor = "#28a745"; header.style.color = "#fff";
                     konten.innerHTML = `
                         <table class="table table-bordered text-dark mb-0">
-                            <tr><td width="35%"><strong>No. SPK / Kwitansi</strong></td><td><strong class="text-primary">${dataDitemukan.no_spk}</strong></td></tr>
+                            <tr><td width="35%"><strong>Nomor SPK</strong></td><td><strong class="text-primary">${dataDitemukan.no_spk}</strong></td></tr>
                             <tr><td><strong>Tanggal SPK</strong></td><td>${dataDitemukan.tgl_spk}</td></tr>
                             <tr><td><strong>Nama Customer</strong></td><td><strong>${dataDitemukan.customer}</strong></td></tr>
-                            <tr><td><strong>Nama Sales</strong></td><td>${dataDitemukan.sales}</td></tr>
-                            <tr><td><strong>Type Unit</strong></td><td>${dataDitemukan.type}</td></tr>
-                            <tr><td><strong>VIN No. / Noka</strong></td><td>${dataDitemukan.vin} / ${dataDitemukan.noka}</td></tr>
+                            <tr><td><strong>Nama Sales / SPV</strong></td><td>${dataDitemukan.sales} / ${dataDitemukan.spv}</td></tr>
+                            <tr><td><strong>Type Unit Kendaraan</strong></td><td>${dataDitemukan.type}</td></tr>
+                            <tr><td><strong>VIN / No. Rangka</strong></td><td>${dataDitemukan.vin}</td></tr>
+                            <tr><td><strong>Warna (Ext / Int)</strong></td><td>${dataDitemukan.ext} / ${dataDitemukan.int}</td></tr>
+                            <tr><td><strong>Nilai OTR</strong></td><td><strong class="text-success">${dataDitemukan.chs}</strong></td></tr>
+                            <tr><td><strong>Booking Fee</strong></td><td>${dataDitemukan.booking}</td></tr>
+                        </table>
+                    `;
+                } else {
+                    header.style.backgroundColor = "#6c757d"; header.style.color = "#fff";
+                    konten.innerHTML = `<span class="text-danger font-weight-bold"><i class="fas fa-times-circle mr-1"></i> Nomor SPK "${document.getElementById('noFaktur').value}" tidak ditemukan di lembar SPK 2026!</span>`;
+                }
+            })
+            .catch(err => {
