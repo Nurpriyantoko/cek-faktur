@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Portal Dev - Cek Faktur Terkini</title>
-    <!-- Memuat desain Bootstrap dan ikon langsung via internet secara aman -->
+    <!-- Memuat Bootstrap dan ikon resmi langsung dari internet secara aman -->
     <link rel="stylesheet" href="https://jsdelivr.net">
     <link rel="stylesheet" href="https://cloudflare.com">
     <style>
@@ -25,7 +25,7 @@
     <div class="container-fluid p-0">
         <div class="row no-gutters">
             
-            <!-- 1. SIDEBAR MENU SISI KIRI -->
+            <!-- 1. SIDEBAR MENU (SISI KIRI - LEBAR 2 KOLOM) -->
             <div class="col-md-2 sidebar-container">
                 <a class="sidebar-brand" href="#"><i class="fas fa-tools mr-2"></i>Part Counter</a>
                 <hr class="border-light">
@@ -35,13 +35,13 @@
                 </div>
             </div>
 
-            <!-- 2. AREA KONTEN UTAMA SISI KANAN -->
+            <!-- 2. AREA KONTEN PENCARIAN (SISI KANAN - LEBAR 10 KOLOM) -->
             <div class="col-md-10 d-flex flex-column bg-light">
                 <div class="topbar"></div>
                 <div class="container-fluid px-4">
                     <h1 class="h3 mb-4 text-gray-800">Sistem Pengecekan Faktur <span class="badge badge-primary font-weight-normal text-xs ml-2"><i class="fas fa-sync-alt fa-spin mr-1"></i> Live Auto-Update</span></h1>
                     
-                    <!-- Kotak Formulir Input -->
+                    <!-- Kotak Formulir Input Pencarian -->
                     <div class="card mb-4 col-lg-8 p-0">
                         <div class="card-header py-3">Cari Data Faktur Terkini</div>
                         <div class="card-body">
@@ -49,7 +49,7 @@
                                 <div class="form-group row align-items-center">
                                     <label class="col-sm-3 font-weight-bold text-dark mb-0">Nomor Faktur / JO</label>
                                     <div class="col-sm-9">
-                                        <input type="text" class="form-control" id="noFaktur" placeholder="Contoh: M/O/043/K/IAG/070226" required>
+                                        <input type="text" class="form-control" id="noFaktur" placeholder="Masukkan Nomor Faktur / JO..." required>
                                     </div>
                                 </div>
                                 <div class="text-right mt-3">
@@ -59,7 +59,7 @@
                         </div>
                     </div>
 
-                    <!-- Kotak Hasil Detail Pencarian -->
+                    <!-- Kotak Tabel Hasil Data Ditemukan -->
                     <div id="boxHasil" class="card mb-4 col-lg-8 p-0 d-none">
                         <div id="headerHasil" class="card-header py-3 text-white">Detail Data Ditemukan</div>
                         <div class="card-body text-dark" id="konten"></div>
@@ -75,9 +75,9 @@
     <script src="https://jsdelivr.net"></script>
 
     <script>
-        const LINK_CSV_ANDA = "https://google.com";
+        const LINK_CSV_AND = "https://google.com";
 
-        // Fungsi pembaca CSV yang dimodifikasi untuk mendukung pemisah titik koma (;) dari Google Sheets regional Indonesia
+        // Fungsi pembaca data CSV Google Sheets yang mendukung koma (,) dan titik koma (;)
         function parseCSVLine(text) {
             let p = '', r = []; let q = false;
             for (let i = 0; i < text.length; i++) {
@@ -100,19 +100,19 @@
             btn.innerHTML = `<i class="fas fa-spinner fa-spin mr-2"></i>Mencari...`;
             btn.disabled = true;
 
-            fetch(LINK_CSV_ANDA)
+            fetch(LINK_CSV_AND)
             .then(res => res.text())
             .then(csvText => {
                 const lines = csvText.split("\n");
                 let dataDitemukan = null;
 
-                // Loop membaca baris data spreadsheet (melewati header)
+                // Loop membaca baris data spreadsheet (melewati 3 baris header kosong teratas)
                 for (let i = 3; i < lines.length; i++) {
                     if (!lines[i].trim()) continue;
                     
                     const columns = parseCSVLine(lines[i]);
                     
-                    // Kolom ke-2 (indeks 1) adalah Kolom "No Job Order / Kwitansi" pada tabel Sheets Anda
+                    // Membaca Kolom ke-2 (indeks 1) yaitu Nomor Job Order / Kwitansi
                     if (columns.length > 1 && columns[1]) {
                         const noFakturSheet = columns[1].replace(/^"(.*)"$/, '$1').trim().toLowerCase();
                         
@@ -158,7 +158,7 @@
                     `;
                 } else {
                     header.style.backgroundColor = "#6c757d"; header.style.color = "#fff";
-                    konten.innerHTML = `<span class="text-danger font-weight-bold"><i class="fas fa-times-circle mr-1"></i> Nomor Faktur/JO "${document.getElementById('noFaktur').value}" tidak ditemukan di Google Sheets!</span>`;
+                    konten.innerHTML = `<span class="text-danger font-weight-bold"><i class="fas fa-times-circle mr-1"></i> Nomor Faktur "${document.getElementById('noFaktur').value}" tidak ditemukan di Google Sheets!</span>`;
                 }
             })
             .catch(err => {
