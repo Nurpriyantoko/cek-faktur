@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Portal Dev - Cek Faktur Terkini</title>
-    <!-- Memuat link desain alternatif resmi via internet -->
+    <!-- Memuat link desain resmi Bootstrap via online -->
     <link rel="stylesheet" href="https://jsdelivr.net">
     <link rel="stylesheet" href="https://cloudflare.com">
     <style>
@@ -39,7 +39,7 @@
         <div class="container-fluid">
             <h1 class="h3 mb-4 text-gray-800">Sistem Pengecekan Faktur <span class="badge badge-primary font-weight-normal text-xs ml-2"><i class="fas fa-sync-alt fa-spin mr-1"></i> Live Auto-Update</span></h1>
             
-            <!-- Kotak Formulir Input Tebal & Modern -->
+            <!-- Kotak Formulir Input Pencarian -->
             <div class="card mb-4 col-lg-9 p-0">
                 <div class="card-header py-3"><h6 class="m-0 font-weight-bold text-primary"><i class="fas fa-search mr-1"></i> Cari Data Faktur Terkini</h6></div>
                 <div class="card-body">
@@ -59,37 +59,30 @@
 
             <!-- Kotak Tabel Hasil Pencarian -->
             <div id="boxHasil" class="card mb-4 col-lg-9 p-0 d-none">
-                <div id="headerHasil" class="card-header py-3 text-white"><h6 class="m-0 font-weight-bold" id="judulHasil">Detail Data Ditemukan</h6></div>
+                <div id="headerHasil" class="card-header py-3 text-white"><h6 class="m-0 font-weight-bold">Detail Data Ditemukan</h6></div>
                 <div class="card-body text-dark" id="konten"></div>
             </div>
         </div>
     </div>
 
-    <!-- Memuat Library Pendukung JavaScript -->
+    <!-- Library JavaScript -->
     <script src="https://cloudflare.com"></script>
     <script src="https://jsdelivr.net"></script>
 
     <script>
         const LINK_CSV_ANDA = "https://google.com";
 
-        function parseCSVLine(text) {
-            let p = '', r = []; let q = false;
-            for (let i = 0; i < text.length; i++) {
-                let c = text[i];
-                if (c === '"') { q = !q; }
-                else if ((c === ';' || c === ',') && !q) { r.push(p); p = ''; }
-                else { p += c; }
-            }
-            r.push(p); return r;
-        }
-
         document.getElementById('cekForm').addEventListener('submit', function(e) {
+            // KUNCI UTAMA: Menghentikan browser agar tidak melakukan refresh halaman otomatis
             e.preventDefault();
+            
             const inputFaktur = document.getElementById('noFaktur').value.trim().toLowerCase();
             const box = document.getElementById('boxHasil');
             const header = document.getElementById('headerHasil');
             const konten = document.getElementById('konten');
             const btn = document.getElementById('btnCari');
+
+            if (!inputFaktur) return;
 
             btn.innerHTML = `<i class="fas fa-spinner fa-spin mr-2"></i>Mencari...`;
             btn.disabled = true;
@@ -100,27 +93,31 @@
                 const lines = csvText.split("\n");
                 let dataDitemukan = null;
 
-                // Membaca baris data (Dimulai dari baris ke-4 atau indeks 3 melewati judul spreadsheet)
                 for (let i = 3; i < lines.length; i++) {
-                    if (!lines[i].trim()) continue;
+                    let baris = lines[i].trim();
+                    if (!baris) continue;
                     
-                    const columns = parseCSVLine(lines[i]);
+                    // Memecah baris menggunakan tanda titik koma (;) khas regional Excel/Sheets Indonesia
+                    let columns = baris.split(";");
                     
-                    // Kolom ke-4 (indeks 3) adalah kolom "No Faktur" asli pada spreadsheet Anda
-                    if (columns.length > 3 && columns[3]) {
-                        const noFakturSheet = columns[3].replace(/^"(.*)"$/, '$1').trim().toLowerCase();
+                    // Menghilangkan tanda kutip pembungkus data jika ada
+                    columns = columns.map(col => col.replace(/^"(.*)"\$/, '\$1').trim());
+
+                    // Kolom ke-4 (indeks 3) adalah kolom "No Faktur / JO" asli spreadsheet Anda
+                    if (columns.length > 3) {
+                        let noFakturSheet = columns[3].toLowerCase();
                         
                         if (noFakturSheet === inputFaktur) {
                             dataDitemukan = {
-                                tanggal: columns[1] ? columns[1].replace(/^"(.*)"$/, '$1').trim() : '-',
-                                customer: columns[2] ? columns[2].replace(/^"(.*)"$/, '$1').trim() : '-',
-                                no_faktur: columns[3] ? columns[3].replace(/^"(.*)"$/, '$1').trim() : '-',
-                                vin: columns[4] ? columns[4].replace(/^"(.*)"$/, '$1').trim() : '-',
-                                type: columns[5] ? columns[5].replace(/^"(.*)"$/, '$1').trim() : '-',
-                                kode_part: columns[6] ? columns[6].replace(/^"(.*)"$/, '$1').trim() : '-',
-                                nama_part: columns[7] ? columns[7].replace(/^"(.*)"$/, '$1').trim() : '-',
-                                total: columns[12] ? columns[12].replace(/^"(.*)"$/, '$1').trim() : '0',
-                                status: columns[14] ? columns[14].replace(/^"(.*)"$/, '$1').trim().toUpperCase() : 'BELUM BAYAR'
+                                tanggal: columns[0] || '-',
+                                customer: columns[1] || '-',
+                                no_faktur: columns[3] || '-',
+                                vin: columns[4] || '-',
+                                type: columns[5] || '-',
+                                kode_part: columns[6] || '-',
+                                nama_part: columns[7] || '-',
+                                total: columns[11] || '0',
+                                status: (columns[13] || 'BELUM BAYAR').toUpperCase()
                             };
                             break;
                         }
@@ -133,7 +130,6 @@
 
                 if (dataDitemukan) {
                     let badgeColor = "badge-secondary";
-                    // Penentuan warna status berdasarkan isi teks database
                     if (dataDitemukan.status.includes("LUNAS")) {
                         header.style.backgroundColor = "#28a745"; header.style.color = "#fff";
                         badgeColor = "badge-success";
@@ -157,3 +153,15 @@
                     `;
                 } else {
                     header.style.backgroundColor = "#6c757d"; header.style.color = "#fff";
+                    konten.innerHTML = `<span class="text-danger font-weight-bold"><i class="fas fa-times-circle mr-1"></i> Nomor Faktur "${document.getElementById('noFaktur').value}" tidak ditemukan di sistem Google Sheets!</span>`;
+                }
+            })
+            .catch(err => {
+                btn.innerHTML = `Cari Data`; btn.disabled = false; box.classList.remove('d-none');
+                header.style.backgroundColor = "#343a40"; header.style.color = "#fff";
+                konten.innerHTML = `<span class="text-danger font-weight-bold"><i class="fas fa-exclamation-triangle mr-1"></i> Terjadi kesalahan memproses basis data online.</span>`;
+            });
+        });
+    </script>
+</body>
+</html>
