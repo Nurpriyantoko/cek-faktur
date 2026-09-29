@@ -4,7 +4,6 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>X-POS Logistics - Part Master Dynamic</title>
-    <!-- Memuat link desain resmi Bootstrap dan ikon FontAwesome via online -->
     <link rel="stylesheet" href="https://jsdelivr.net">
     <link rel="stylesheet" href="https://cloudflare.com">
     <style>
@@ -45,7 +44,6 @@
 </head>
 <body>
 
-    <!-- 1. SIDEBAR MENU SISI KIRI -->
     <div class="sidebar-container">
         <a class="sidebar-brand" href="#">
             <div class="brand-logo">XP</div>
@@ -64,7 +62,6 @@
         </div>
     </div>
 
-    <!-- 2. AREA KONTEN UTAMA SISI KANAN -->
     <div class="main-content">
         <div id="page-master" class="page-section active">
             <div class="page-header">
@@ -73,7 +70,6 @@
             </div>
             <div class="card search-card">
                 <div class="row">
-                    <!-- INPUT KOTAK MODUL (COPOT TOTAL DARI SISTEM FORM BAWAN UNTUK MENGUNCI REFRESH) -->
                     <div class="col-md-5 border-right pr-4">
                         <div class="section-title"><span class="brand-logo p-1 px-2 mr-2" style="font-size:0.75rem;">#</span> INVENTORY SEARCH</div>
                         <div class="section-subtitle">Input specific part numbers to check current stock availability.</div>
@@ -94,7 +90,6 @@
                             <button type="button" class="btn-reset" onclick="resetFormInputs()">Reset</button>
                         </div>
                     </div>
-                    <!-- DISPLAY AREA TABEL -->
                     <div class="col-md-7 pl-4">
                         <div id="outputArea" class="output-container"><span id="defaultText" class="text-muted font-weight-bold">AWAITING QUERY INPUT</span></div>
                     </div>
@@ -103,3 +98,8 @@
         </div>
         <div id="page-order" class="page-section"><div class="card search-card p-4"><h5>Halaman Part Order sedang disinkronisasikan...</h5></div></div>
         <div id="page-inquiry" class="page-section"><div class="card search-card p-4"><h5>Halaman Part Inquiry sedang disinkronisasikan...</h5></div></div>
+        <div id="page-claim" class="page-section"><div class="card search-card p-4"><h5>Halaman Part Claim sedang disinkronisasikan...</h5></div></div>
+        <div id="page-claim-inq" class="page-section"><div class="card search-card p-4"><h5>Halaman Claim Inquiry sedang disinkronisasikan...</h5></div></div>
+    </div>
+
+    <script>
