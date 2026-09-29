@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>X-POS Logistics - Part Master Dynamic</title>
-    <!-- Memuat link desain resmi Bootstrap dan ikon FontAwesome via online -->
+    <!-- Desain Mandiri Tanpa Ketergantungan Eksternal yang Rentan Macet -->
     <link rel="stylesheet" href="https://jsdelivr.net">
     <link rel="stylesheet" href="https://cloudflare.com">
     <style>
@@ -45,7 +45,7 @@
 </head>
 <body>
 
-    <!-- 1. SIDEBAR MENU SISI KIRI -->
+    <!-- SIDEBAR MENU LEFT -->
     <div class="sidebar-container">
         <a class="sidebar-brand" href="#">
             <div class="brand-logo">XP</div>
@@ -64,7 +64,7 @@
         </div>
     </div>
 
-    <!-- 2. AREA KONTEN UTAMA SISI KANAN -->
+    <!-- MAIN CONTENT RIGHT -->
     <div class="main-content">
         <div id="page-master" class="page-section active">
             <div class="page-header">
@@ -73,11 +73,11 @@
             </div>
             <div class="card search-card">
                 <div class="row">
-                    <!-- INPUT FORM -->
+                    <!-- INPUT FORM SISI KIRI -->
                     <div class="col-md-5 border-right pr-4">
                         <div class="section-title"><span class="brand-logo p-1 px-2 mr-2" style="font-size:0.75rem;">#</span> INVENTORY SEARCH</div>
                         <div class="section-subtitle">Input specific part numbers to check current stock availability.</div>
-                        <form id="stockForm">
+                        <form id="stockForm" onsubmit="executeStockQuery(event)">
                             <div class="row">
                                 <div class="col-6 mb-3"><input type="text" class="form-control form-control-custom part-input" placeholder="1  Part Number"></div>
                                 <div class="col-6 mb-3"><input type="text" class="form-control form-control-custom part-input" placeholder="2  Part Number"></div>
@@ -91,12 +91,13 @@
                                 <div class="col-6 mb-3"><input type="text" class="form-control form-control-custom part-input" placeholder="10 Part Number"></div>
                             </div>
                             <div class="mt-3">
-                                <button type="submit" class="btn-query shadow-sm" id="btnQuery">Query Stock</button>
-                                <button type="button" class="btn-reset" id="btnReset">Reset</button>
+                                <!-- Trigger Aksi Dikunci Langsung pada Tombol Element -->
+                                <button type="submit" class="btn-query shadow-sm">Query Stock</button>
+                                <button type="button" class="btn-reset" onclick="resetFormInputs()">Reset</button>
                             </div>
                         </form>
                     </div>
-                    <!-- DISPLAY AREA -->
+                    <!-- TAMPILAN TABEL SISI KANAN -->
                     <div class="col-md-7 pl-4">
                         <div id="outputArea" class="output-container"><span id="defaultText" class="text-muted font-weight-bold">AWAITING QUERY INPUT</span></div>
                     </div>
@@ -104,4 +105,3 @@
             </div>
         </div>
         <div id="page-order" class="page-section"><div class="card search-card p-4"><h5>Halaman Part Order sedang disinkronisasikan...</h5></div></div>
-        <div id="page-inquiry" class="page-section"><div class="card search-card p-4"><h5>Halaman Part Inquiry sedang disinkronisasikan...</h5></div></div>
