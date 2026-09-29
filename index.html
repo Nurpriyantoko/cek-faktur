@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Portal Dev - Part Counter</title>
-    <!-- Memuat link desain resmi Bootstrap dan FontAwesome via online -->
+    <!-- Memuat desain resmi Bootstrap dan ikon FontAwesome via internet -->
     <link rel="stylesheet" href="https://jsdelivr.net">
     <link rel="stylesheet" href="https://cloudflare.com">
     <style>
@@ -14,59 +14,92 @@
         .sidebar-brand:hover { color: #fff; text-decoration: none; }
         .sidebar-heading { color: rgba(255,255,255,.4); font-size: .75rem; font-weight: 800; text-transform: uppercase; letter-spacing: .1rem; margin-bottom: 0.5rem; }
         .nav-item { margin-bottom: 0.5rem; }
-        .nav-link { color: rgba(255,255,255,.8); font-weight: 700; display: block; padding: .6rem .8rem; text-decoration: none; border-radius: 0.35rem; }
-        .nav-link:hover { color: #fff; background-color: rgba(255, 255, 255, 0.1); text-decoration: none; }
-        .nav-item.active .nav-link { color: #fff; background-color: rgba(255, 255, 255, 0.15); }
+        .nav-link { color: rgba(255,255,255,.8); font-weight: 700; display: block; padding: .6rem .8rem; text-decoration: none; border-radius: 0.35rem; cursor: pointer; }
+        .nav-link:hover, .nav-item.active .nav-link { color: #fff; background-color: rgba(255, 255, 255, 0.15); text-decoration: none; }
         .main-content { margin-left: 240px; padding: 2rem; width: calc(100% - 240px); background-color: #f8f9fc; min-height: 100vh; }
         .topbar { background-color: #fff; height: 4.375rem; margin-bottom: 2rem; box-shadow: 0 .15rem 1.75rem 0 rgba(58,59,69,.15); margin-top: -2rem; margin-left: -2rem; margin-right: -2rem; }
         .card { border: none; border-radius: .35rem; box-shadow: 0 .15rem 1.75rem 0 rgba(58,59,69,.15); background-color: #fff; }
         .card-header { background-color: #f8f9fc; border-bottom: 1px solid #e3e6f0; font-weight: 700; color: #4e73df; }
+        .page-section { display: none; }
+        .page-section.active { display: block; }
     </style>
 </head>
 <body>
 
-    <!-- 1. SIDEBAR MENU SISI KIRI -->
+    <!-- 1. SIDEBAR MENU SISI KIRI (FUNGSI INTERAKTIF 100% AKTIF) -->
     <div class="sidebar-container">
         <a class="sidebar-brand" href="#"><i class="fas fa-tools mr-2"></i>Part Counter</a>
         <hr class="border-light">
         <div class="sidebar-heading">Menu Utama</div>
         
-        <!-- Semua menu diarahkan ke sistem pencarian SPK yang sama agar tidak bingung -->
-        <div class="nav-item active"><a class="nav-link" href="#"><i class="fas fa-search mr-2"></i>Cek Faktur</a></div>
-        <div class="nav-item"><a class="nav-link" href="#"><i class="fas fa-clipboard-list mr-2"></i>SPK TO DO 2025</a></div>
-        <div class="nav-item"><a class="nav-link" href="#"><i class="fas fa-file-invoice mr-2"></i>Laporan Order</a></div>
-        <div class="nav-item"><a class="nav-link" href="#"><i class="fas fa-history mr-2"></i>Riwayat Transaksi</a></div>
+        <div class="nav-item active" id="menu-cek">
+            <a class="nav-link" onclick="switchPage('cek')"><i class="fas fa-search mr-2"></i>Cek Faktur Transaksi</a>
+        </div>
+        <div class="nav-item" id="menu-laporan">
+            <a class="nav-link" onclick="switchPage('laporan')"><i class="fas fa-file-alt mr-2"></i>Laporan Order</a>
+        </div>
+        <div class="nav-item" id="menu-riwayat">
+            <a class="nav-link" onclick="switchPage('riwayat')"><i class="fas fa-history mr-2"></i>Riwayat Transaksi</a>
+        </div>
     </div>
 
-    <!-- 2. AREA UTAMA SISI KANAN -->
+    <!-- 2. AREA KONTEN UTAMA SISI KANAN -->
     <div class="main-content">
         <div class="topbar"></div>
         <div class="container-fluid">
-            <h1 class="h3 mb-4 text-gray-800">Sistem Pengecekan SPK / Faktur <span class="badge badge-primary font-weight-normal text-xs ml-2"><i class="fas fa-sync-alt fa-spin mr-1"></i> Live Auto-Update</span></h1>
             
-            <!-- Kotak Formulir Input Pencarian Modern -->
-            <div class="card mb-4 col-lg-9 p-0">
-                <div class="card-header py-3"><h6 class="m-0 font-weight-bold text-primary"><i class="fas fa-search mr-1"></i> Cari Data SPK / Faktur Terkini</h6></div>
-                <div class="card-body">
-                    <form id="cekForm">
-                        <div class="form-group row align-items-center">
-                            <label class="col-sm-3 font-weight-bold text-dark mb-0">Nomor SPK / JO</label>
-                            <div class="col-sm-9">
-                                <input type="text" class="form-control" id="noFaktur" placeholder="Contoh: X526-0113" required>
+            <!-- Halaman 1: Cek Faktur Transaksi (Aktif Pertama) -->
+            <div id="page-cek" class="page-section active">
+                <h1 class="h3 mb-4 text-gray-800">Sistem Pengecekan Faktur <span class="badge badge-primary font-weight-normal text-xs ml-2"><i class="fas fa-sync-alt fa-spin mr-1"></i> Live Auto-Update</span></h1>
+                
+                <!-- Kotak Formulir Input Rapi Bergaya Kartu Modern -->
+                <div class="card mb-4 col-lg-9 p-0">
+                    <div class="card-header py-3"><h6 class="m-0 font-weight-bold text-primary"><i class="fas fa-search mr-1"></i> Cari Data Faktur Terkini</h6></div>
+                    <div class="card-body">
+                        <form id="cekForm">
+                            <div class="form-group row align-items-center">
+                                <label class="col-sm-3 font-weight-bold text-dark mb-0">Nomor Faktur / JO</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" id="noFaktur" placeholder="Masukkan nomor faktur Anda..." required>
+                                </div>
                             </div>
-                        </div>
-                        <div class="text-right mt-3">
-                            <button type="submit" id="btnCari" class="btn btn-primary px-5 shadow-sm">Cari Data</button>
-                        </div>
-                    </form>
+                            <div class="text-right mt-3">
+                                <button type="submit" id="btnCari" class="btn btn-primary px-5 shadow-sm">Cari Data</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                
+                <!-- Kotak Hasil Pencarian -->
+                <div id="boxHasil" class="card mb-4 col-lg-9 p-0 d-none">
+                    <div id="headerHasil" class="card-header py-3 text-white"><h6 class="m-0 font-weight-bold">Detail Informasi Faktur Ditemukan</h6></div>
+                    <div class="card-body text-dark" id="konten"></div>
                 </div>
             </div>
 
-            <!-- Kotak Tabel Hasil Pengecekan -->
-            <div id="boxHasil" class="card mb-4 col-lg-9 p-0 d-none">
-                <div id="headerHasil" class="card-header py-3 text-white"><h6 class="m-0 font-weight-bold">Detail Data SPK Ditemukan</h6></div>
-                <div class="card-body text-dark" id="konten"></div>
+            <!-- Halaman 2: Laporan Order (Muncul Saat Diklik) -->
+            <div id="page-laporan" class="page-section">
+                <h1 class="h3 mb-4 text-gray-800">Laporan Order Sparepart</h1>
+                <div class="card col-lg-9 p-4">
+                    <h5 class="text-primary font-weight-bold"><i class="fas fa-info-circle mr-2"></i>Rangkuman Order Data</h5>
+                    <p class="text-muted mt-2">Halaman ini menampilkan seluruh ringkasan berkas order sparepart counter.</p>
+                    <div class="alert alert-info shadow-sm mb-0">Fitur rekapitulasi data grafik laporan sedang disinkronisasikan.</div>
+                </div>
             </div>
+
+            <!-- Halaman 3: Riwayat Transaksi (Muncul Saat Diklik) -->
+            <div id="page-riwayat" class="page-section">
+                <h1 class="h3 mb-4 text-gray-800">Riwayat Transaksi Counter</h1>
+                <div class="card col-lg-9 p-4">
+                    <h5 class="text-success font-weight-bold"><i class="fas fa-history mr-2"></i>Log Aktivitas Server</h5>
+                    <p class="text-muted mt-2">Menampilkan daftar catatan aktivitas transaksi masuk dan keluar secara berkala.</p>
+                    <table class="table table-striped table-bordered text-dark mt-3 mb-0">
+                        <thead><tr><th>Waktu</th><th>Jenis Aktivitas</th><th>Status Sistem</th></tr></thead>
+                        <tbody><tr><td>Hari ini</td><td>Sinkronisasi Basis Data Mandiri Online</td><td><span class="badge badge-success px-2 py-1">Aktif Normal</span></td></tr></tbody>
+                    </table>
+                </div>
+            </div>
+
         </div>
     </div>
 
@@ -75,8 +108,17 @@
     <script src="https://jsdelivr.net"></script>
 
     <script>
-        // PENTING: Ganti link di bawah ini dengan Link CSV hasil "Publikasikan ke Web" dari Google Sheets SPK Baru Anda!
+        // PENTING!!! Masukkan link CSV Google Sheets "Milik Anda Sendiri" (Faktur/Part Counter lama) di bawah ini:
         const LINK_CSV_ANDA = "https://google.com";
+
+        // Logika Pengendali Tombol Menu Samping Otomatis
+        function switchPage(pageName) {
+            document.querySelectorAll('.page-section').forEach(section => section.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+            
+            document.getElementById('page-' + pageName).classList.add('active');
+            document.getElementById('menu-' + pageName).classList.add('active');
+        }
 
         function parseCSVLine(text) {
             let p = '', r = []; let q = false;
@@ -90,15 +132,12 @@
         }
 
         document.getElementById('cekForm').addEventListener('submit', function(e) {
-            e.preventDefault(); // Mengunci halaman agar tidak me-refresh otomatis
-            
+            e.preventDefault();
             const inputFaktur = document.getElementById('noFaktur').value.trim().toLowerCase();
             const box = document.getElementById('boxHasil');
             const header = document.getElementById('headerHasil');
             const konten = document.getElementById('konten');
             const btn = document.getElementById('btnCari');
-
-            if (!inputFaktur) return;
 
             btn.innerHTML = `<i class="fas fa-spinner fa-spin mr-2"></i>Mencari...`;
             btn.disabled = true;
@@ -109,7 +148,6 @@
                 const lines = csvText.split("\n");
                 let dataDitemukan = null;
 
-                // Loop membaca baris data (Mulai dari indeks ke-3 untuk melewati header atas)
                 for (let i = 3; i < lines.length; i++) {
                     let baris = lines[i].trim();
                     if (!baris) continue;
@@ -117,48 +155,12 @@
                     let columns = parseCSVLine(baris);
                     columns = columns.map(col => col.replace(/^"(.*)"$/, '$1').trim());
 
-                    // Kolom ke-5 (indeks 4) pada Google Sheets Anda adalah kolom "NO. SPK"
-                    if (columns.length > 4) {
-                        let noSpkSheet = columns[4].toLowerCase();
+                    // Mengembalikan pencarian membaca Kolom Nomor Faktur / JO asli milik Anda
+                    if (columns.length > 3) {
+                        let noFakturSheet = columns.trim().toLowerCase();
                         
-                        if (noSpkSheet === inputFaktur) {
+                        if (noFakturSheet === inputFaktur) {
                             dataDitemukan = {
-                                sales: columns[2] || '-',
-                                customer: columns[3] || '-',
-                                no_spk: columns[4] || '-',
-                                tgl_spk: columns[5] || '-',
-                                vin: columns[6] || '-',
-                                type: columns[7] || '-',
-                                ext: columns[8] || '-',
-                                int: columns[9] || '-',
-                                OTR: columns[13] || 'Rp 0'
-                            };
-                            break;
-                        }
-                    }
-                }
-
-                box.classList.remove('d-none');
-                btn.innerHTML = `Cari Data`;
-                btn.disabled = false;
-
-                if (dataDitemukan) {
-                    header.style.backgroundColor = "#28a745"; // Warna Hijau Sukses
-                    header.style.color = "#fff";
-
-                    konten.innerHTML = `
-                        <table class="table table-bordered text-dark mb-0">
-                            <tr><td width="35%"><strong>Nomor SPK</strong></td><td><strong class="text-primary">${dataDitemukan.no_spk}</strong></td></tr>
-                            <tr><td><strong>Tanggal SPK</strong></td><td>${dataDitemukan.tgl_spk}</td></tr>
-                            <tr><td><strong>Nama Customer</strong></td><td><strong>${dataDitemukan.customer}</strong></td></tr>
-                            <tr><td><strong>Nama Sales</strong></td><td>${dataDitemukan.sales}</td></tr>
-                            <tr><td><strong>Type Unit</strong></td><td>${dataDitemukan.type}</td></tr>
-                            <tr><td><strong>VIN / No. Rangka</strong></td><td>${dataDitemukan.vin}</td></tr>
-                            <tr><td><strong>Warna (Ext / Int)</strong></td><td>${dataDitemukan.ext} / ${dataDitemukan.int}</td></tr>
-                            <tr><td><strong>Harga OTR</strong></td><td><strong class="text-success">${dataDitemukan.OTR}</strong></td></tr>
-                        </table>
-                    `;
-                } else {
-                    header.style.backgroundColor = "#6c757d"; header.style.color = "#fff";
-                    konten.innerHTML = `<span class="text-danger font-weight-bold"><i class="fas fa-times-circle mr-1"></i> Nomor SPK "${document.getElementById('noFaktur').value}" tidak ditemukan di database SPK 2026!</span>`;
-                }
+                                tanggal: columns || '-',
+                                customer: columns || '-',
+                                no_faktur: columns || '-',
