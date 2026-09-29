@@ -4,7 +4,8 @@
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>X-POS | Logistics Cloud Terminal</title>
-    <!-- Memuat Library Desain Premium Sesuai Kode Sumber Asli Anda -->
+    <!-- Jalur Desain Ganda Anti Gagal Memuat -->
+    <link rel="stylesheet" href="https://jsdelivr.net">
     <script src="https://tailwindcss.com"></script>
     <link href="https://googleapis.com" rel="stylesheet">
     <link rel="stylesheet" href="https://cloudflare.com">
@@ -13,113 +14,187 @@
             font-family: 'Plus Jakarta Sans', sans-serif;
             overflow-x: hidden;
             background-color: #f8fafc;
+            margin: 0;
+            padding: 0;
         }
-        input:focus {
+        .sidebar-container {
+            background-color: #ffffff;
+            min-height: 100vh;
+            padding: 1.5rem;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 260px;
+            z-index: 1000;
+            border-right: 1px solid #edf2f7;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .main-content {
+            margin-left: 260px;
+            padding: 2rem;
+            min-height: 100vh;
+            width: calc(100% - 260px);
+        }
+        .search-card {
+            background-color: #ffffff;
+            border: 1px solid #edf2f7;
+            border-radius: 1.25rem;
+            padding: 2rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.01), 0 2px 4px -1px rgba(0, 0, 0, 0.01);
+        }
+        .form-control-custom {
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.75rem;
+            padding: 0.625rem 1rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #334155;
+            height: auto;
+            width: 100%;
+            transition: all 0.2s;
+        }
+        .form-control-custom:focus {
             outline: none;
-            border-color: #0f172a !important;
-            box-shadow: 0 0 0 4px rgba(15, 23, 42, 0.05) !important;
+            background-color: #fff;
+            border-color: #0f172a;
+            box-shadow: 0 0 0 4px rgba(15, 23, 42, 0.05);
         }
-        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
-        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #cbd5e1; }
+        .btn-query {
+            background-color: #0f172a;
+            color: #ffffff;
+            font-weight: 700;
+            font-size: 0.75rem;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.75rem;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .btn-query:hover { background-color: #1e293b; color: #fff; }
+        .btn-reset {
+            background-color: transparent;
+            color: #64748b;
+            font-weight: 700;
+            font-size: 0.75rem;
+            padding: 0.75rem 1.25rem;
+            border-radius: 0.75rem;
+            border: 1px solid #e2e8f0;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-reset:hover { background-color: #f8fafc; color: #0f172a; }
+        .output-container {
+            background-color: #ffffff;
+            border: 1px dashed #e2e8f0;
+            border-radius: 1rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 440px;
+            padding: 1.5rem;
+            text-align: center;
+            width: 100%;
+            height: 100%;
+        }
         .page-section { display: none; }
         .page-section.active { display: block; }
+        .nav-link-custom {
+            color: #475569;
+            font-weight: 600;
+            font-size: 0.875rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            text-decoration: none;
+            border-radius: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .nav-link-custom:hover, .nav-item.active .nav-link-custom {
+            color: #0f172a;
+            background-color: #f8fafc;
+            font-weight: 700;
+            text-decoration: none;
+        }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-800 antialiased">
+<body>
 
-    <!-- 1. SIDEBAR KIRI PREMIUM -->
-    <div class="sidebar-container fixed top-0 left-0 w-[260px] h-screen bg-white border-r border-slate-100 p-6 flex flex-col justify-between z-50">
+    <!-- 1. SIDEBAR KIRI FIXED -->
+    <div class="sidebar-container">
         <div>
             <!-- LOGO BRAND -->
-            <a href="#" class="flex items-center gap-3 px-2 mb-8 no-underline">
-                <div class="bg-slate-900 text-white font-extrabold px-3 py-1.5 rounded-lg text-lg tracking-wider">XP</div>
-                <div class="flex flex-col">
-                    <span class="text-slate-900 font-bold text-sm tracking-tight leading-none">X-POS</span>
-                    <span class="text-slate-400 font-semibold text-[10px] tracking-widest uppercase mt-0.5">LOGISTICS</span>
+            <div class="d-flex align-items-center" style="gap: 0.75rem; margin-bottom: 2rem; padding-left: 0.5rem;">
+                <div style="background-color: #0f172a; color: #fff; font-weight: 800; padding: 0.375rem 0.75rem; border-radius: 0.5rem; font-size: 1.125rem; tracking-content: 0.05em;">XP</div>
+                <div class="d-flex flex-column" style="line-height: 1;">
+                    <span style="color: #0f172a; font-weight: 700; font-size: 0.875rem;">X-POS</span>
+                    <span style="color: #94a3b8; font-weight: 600; font-size: 0.625rem; letter-spacing: 0.05em; text-transform: uppercase; margin-top: 0.125rem;">LOGISTICS</span>
                 </div>
-            </a>
+            </div>
 
-            <!-- NAVIGATION LINKS -->
-            <div class="space-y-1">
-                <div class="nav-item active" id="menu-master">
-                    <a onclick="switchPage('master')" class="flex items-center gap-3 px-4 py-3 text-slate-600 font-semibold text-sm rounded-xl cursor-pointer hover:bg-slate-50 transition-all bg-slate-50 !text-slate-900 font-bold">
-                        <i class="fa-solid fa-layer-group text-base w-5 text-center text-slate-900"></i>Part Master
-                    </a>
-                </div>
-                <div class="nav-item" id="menu-order">
-                    <a onclick="switchPage('order')" class="flex items-center gap-3 px-4 py-3 text-slate-500 font-semibold text-sm rounded-xl cursor-pointer hover:bg-slate-50 transition-all">
-                        <i class="fa-solid fa-cart-shopping text-base w-5 text-center"></i>Part Order
-                    </a>
-                </div>
-                <div class="nav-item" id="menu-inquiry">
-                    <a onclick="switchPage('inquiry')" class="flex items-center gap-3 px-4 py-3 text-slate-500 font-semibold text-sm rounded-xl cursor-pointer hover:bg-slate-50 transition-all">
-                        <i class="fa-solid fa-magnifying-glass text-base w-5 text-center"></i>Part Inquiry
-                    </a>
-                </div>
-                <div class="nav-item" id="menu-claim">
-                    <a onclick="switchPage('claim')" class="flex items-center gap-3 px-4 py-3 text-slate-500 font-semibold text-sm rounded-xl cursor-pointer hover:bg-slate-50 transition-all">
-                        <i class="fa-solid fa-triangle-exclamation text-base w-5 text-center"></i>Part Claim
-                    </a>
-                </div>
-                <div class="nav-item" id="menu-claim-inq">
-                    <a onclick="switchPage('claim-inq')" class="flex items-center gap-3 px-4 py-3 text-slate-500 font-semibold text-sm rounded-xl cursor-pointer hover:bg-slate-50 transition-all">
-                        <i class="fa-solid fa-folder-open text-base w-5 text-center"></i>Claim Inquiry
-                    </a>
-                </div>
+            <!-- MENU ITEM LINKS -->
+            <div class="nav-item active" id="menu-master" style="margin-bottom: 0.25rem;">
+                <a onclick="switchPage('master')" class="nav-link-custom"><i class="fa-solid fa-layer-group" style="width: 1.25rem; text-align: center;"></i>Part Master</a>
+            </div>
+            <div class="nav-item" id="menu-order" style="margin-bottom: 0.25rem;">
+                <a onclick="switchPage('order')" class="nav-link-custom"><i class="fa-solid fa-cart-shopping" style="width: 1.25rem; text-align: center;"></i>Part Order</a>
+            </div>
+            <div class="nav-item" id="menu-inquiry" style="margin-bottom: 0.25rem;">
+                <a onclick="switchPage('inquiry')" class="nav-link-custom"><i class="fa-solid fa-magnifying-glass" style="width: 1.25rem; text-align: center;"></i>Part Inquiry</a>
+            </div>
+            <div class="nav-item" id="menu-claim" style="margin-bottom: 0.25rem;">
+                <a onclick="switchPage('claim')" class="nav-link-custom"><i class="fa-solid fa-triangle-exclamation" style="width: 1.25rem; text-align: center;"></i>Part Claim</a>
+            </div>
+            <div class="nav-item" id="menu-claim-inq" style="margin-bottom: 0.25rem;">
+                <a onclick="switchPage('claim-inq')" class="nav-link-custom"><i class="fa-solid fa-folder-open" style="width: 1.25rem; text-align: center;"></i>Claim Inquiry</a>
             </div>
         </div>
 
-        <!-- PROFILE CONTAINER -->
-        <div class="border-t border-slate-100 pt-4 flex flex-col gap-3">
-            <div class="flex items-center gap-3">
-                <div class="w-10 h-10 bg-slate-100 rounded-xl flex items-center justify-center text-slate-600 font-bold"><i class="fa-solid fa-user"></i></div>
-                <div class="flex flex-col">
-                    <strong class="text-slate-900 font-bold text-xs tracking-tight">XPENG SUNTER</strong>
-                    <span class="text-slate-400 font-medium text-[10px]">AF00115</span>
+        <!-- PROFILE POJOK BAWAH -->
+        <div style="border-top: 1px solid #edf2f7; padding-top: 1rem;">
+            <div class="d-flex align-items-center" style="gap: 0.75rem; margin-bottom: 0.75rem;">
+                <div style="width: 2.5rem; height: 2.5rem; background-color: #f1f5f9; border-radius: 0.75rem; display: flex; align-items: center; justify-content: center; color: #64748b; font-weight: bold;"><i class="fa-solid fa-user"></i></div>
+                <div class="d-flex flex-column" style="line-height: 1.2;">
+                    <span style="color: #0f172a; font-weight: 700; font-size: 0.75rem;">XPENG SUNTER</span>
+                    <span style="color: #94a3b8; font-weight: 500; font-size: 0.625rem;">AF00115</span>
                 </div>
             </div>
-            <a href="#" class="text-red-500 font-bold text-[11px] no-underline flex items-center gap-2 px-1 hover:text-red-600 transition-colors"><i class="fa-solid fa-right-from-bracket"></i> Sign Out</a>
+            <a href="#" style="color: #ef4444; font-weight: 700; font-size: 0.6875rem; text-decoration: none; display: flex; align-items: center; gap: 0.5rem; padding-left: 0.25rem;"><i class="fa-solid fa-right-from-bracket"></i> Sign Out</a>
         </div>
     </div>
 
-    <!-- 2. MAIN HUB UTAMA SISI KANAN -->
-    <div class="main-content pl-[260px] w-full min-h-screen">
-        <div class="p-8 max-w-[1400px] mx-auto">
-            
-            <div id="page-master" class="page-section active">
-                <div class="mb-8">
-                    <h1 class="text-2xl font-extrabold text-slate-900 tracking-tight">MASTER</h1>
-                    <div class="flex items-center gap-2 text-slate-400 font-semibold text-[11px] uppercase tracking-wider mt-1">
-                        <span class="w-2 h-2 rounded-full bg-emerald-500 inline-block animate-pulse"></span> TERMINAL: AF00115
-                    </div>
+    <!-- 2. MAIN CONTENT HUB SISI KANAN -->
+    <div class="main-content">
+        
+        <!-- SECTION: PART MASTER -->
+        <div id="page-master" class="page-section active">
+            <div style="margin-bottom: 2rem;">
+                <h1 style="font-size: 1.5rem; font-weight: 800; color: #0f172a; margin: 0; tracking: -0.025em;">MASTER</h1>
+                <div style="font-size: 0.6875rem; color: #94a3b8; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-top: 0.25rem; display: flex; align-items: center; gap: 0.5rem;">
+                    <span style="width: 0.5rem; height: 0.5rem; border-radius: 50%; background-color: #10b981; display: inline-block;"></span> TERMINAL: AF00115
                 </div>
+            </div>
 
-                <div class="bg-white border border-slate-100 rounded-3xl p-8 shadow-sm min-h-[560px]">
-                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
-                        
-                        <!-- PANEL INPUT SEARCH -->
-                        <div class="lg:col-span-5 lg:border-r lg:border-slate-100 lg:pr-8">
-                            <div class="flex items-center gap-2 text-slate-900 font-extrabold text-xs tracking-wider uppercase mb-1">
-                                <span class="bg-slate-900 text-white text-[10px] px-1.5 py-0.5 rounded">#</span> Inventory Search
-                            </div>
-                            <p class="text-slate-400 font-medium text-xs mb-6">Input specific part numbers to check current stock availability.</p>
+            <!-- CARD GRID SYSTEM BANNER -->
+            <div class="search-card">
+                <div class="row">
+                    <!-- INPUT FIELD CONTAINER -->
+                    <div class="col-lg-5 border-right" style="padding-right: 2rem;">
+                        <div style="color: #0f172a; font-weight: 800; font-size: 0.75rem; letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 0.25rem;">
+                            <span style="background-color: #0f172a; color: #fff; font-size: 0.625rem; padding: 0.125rem 0.375rem; border-radius: 0.25rem; margin-right: 0.25rem;">#</span> Inventory Search
+                        </div>
+                        <p style="color: #94a3b8; font-weight: 500; font-size: 0.75rem; margin-bottom: 1.5rem;">Input specific part numbers to check current stock availability.</p>
 
-                            <div class="grid grid-cols-2 gap-3 mb-6">
-                                <div><input type="text" class="part-input w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs font-semibold text-slate-700 transition-all placeholder-slate-300" placeholder="1  Part Number"></div>
-                                <div><input type="text" class="part-input w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs font-semibold text-slate-700 transition-all placeholder-slate-300" placeholder="2  Part Number"></div>
-                                <div><input type="text" class="part-input w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs font-semibold text-slate-700 transition-all placeholder-slate-300" placeholder="3  Part Number"></div>
-                                <div><input type="text" class="part-input w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs font-semibold text-slate-700 transition-all placeholder-slate-300" placeholder="4  Part Number"></div>
-                                <div><input type="text" class="part-input w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs font-semibold text-slate-700 transition-all placeholder-slate-300" placeholder="5  Part Number"></div>
-                                <div><input type="text" class="part-input w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs font-semibold text-slate-700 transition-all placeholder-slate-300" placeholder="6  Part Number"></div>
-                                <div><input type="text" class="part-input w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs font-semibold text-slate-700 transition-all placeholder-slate-300" placeholder="7  Part Number"></div>
-                                <div><input type="text" class="part-input w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs font-semibold text-slate-700 transition-all placeholder-slate-300" placeholder="8  Part Number"></div>
-                                <div><input type="text" class="part-input w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs font-semibold text-slate-700 transition-all placeholder-slate-300" placeholder="9  Part Number"></div>
-                                <div><input type="text" class="part-input w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs font-semibold text-slate-700 transition-all placeholder-slate-300" placeholder="10 Part Number"></div>
-                            </div>
-
-                            <div class="flex items-center gap-3">
-                                <button onclick="executeStockQuery()" type="button" class="btn-query bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs tracking-wide px-6 py-3 rounded-xl transition-all shadow-sm flex items-center justify-center gap-2"><i class="fa-solid fa-magnifying-glass"></i> Query Stock</button>
-                                <button onclick="clearFormInputs()" type="button" class="border border-slate-200 hover:bg-slate-50 text-slate-500 font-bold text-xs tracking-wide px-5 py-3 rounded-xl transition-all flex items-center justify-center gap-2"><i class="fa-solid fa-arrow-rotate-left"></i> Reset</button>
-                            </div>
+                        <!-- GRID FIELD INPUT 10 SEKAT -->
+                        <div class="row" style="margin-left: -5px; margin-right: -5px;">
+                            <div class="col-6" style="padding: 0 5px; margin-bottom: 0.75rem;"><input type="text" class="part-input form-control-custom" placeholder="1  Part Number"></div>
+                            <div class="col-6" style="padding: 0 5px; margin-bottom: 0.75rem;"><input type="text" class="part-input form-control-custom" placeholder="2  Part Number"></div>
+                            <div class="col-6" style="padding: 0 5px; margin-bottom: 0.75rem;"><input type="text" class="part-input form-control-custom" placeholder="3  Part Number"></div>
