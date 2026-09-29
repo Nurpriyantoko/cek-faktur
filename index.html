@@ -1,246 +1,126 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8"/>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-        <title>X-POS | Logistics Cloud Terminal</title>
-        <script src="https://tailwindcss.com"></script>
-        <link href="https://googleapis.com" rel="stylesheet">
-        <link rel="stylesheet" href="https://cloudflare.com">
-        <style>
-            body {
-                font-family: 'Plus Jakarta Sans', sans-serif;
-                overflow-x: hidden;
-                background-color: #f8fafc;
-            }
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>X-POS | Logistics Cloud Terminal</title>
+    <!-- Memuat CDN Resmi untuk Desain dan Ikon Aplikasi -->
+    <script src="https://tailwindcss.com"></script>
+    <link href="https://googleapis.com" rel="stylesheet">
+    <link rel="stylesheet" href="https://cloudflare.com">
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            overflow-x: hidden;
+            background-color: #f8fafc;
+        }
+        input:focus {
+            outline: none;
+            border-color: #1e293b !important;
+            box-shadow: 0 0 0 4px rgba(30, 41, 59, 0.05) !important;
+        }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #cbd5e1; }
+        .page-section { display: none; }
+        .page-section.active { display: block; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased">
 
-            input:focus, textarea:focus, select:focus {
-                outline: none;
-                border-color: #1e293b !important;
-                box-shadow: 0 0 0 4px rgba(30, 41, 59, 0.05) !important;
-            }
+    <!-- 1. SIDEBAR KIRI PREMIUM (TATA LETAK ASLI KEMBALI NORMAL) -->
+    <div class="fixed top-0 left-0 w-[260px] h-screen bg-white border-r border-slate-100 p-6 flex flex-col justify-between z-50 shadow-sm">
+        <div>
+            <!-- BRAND LOGO -->
+            <div class="flex items-center gap-3 px-2 mb-8">
+                <div class="bg-slate-900 text-white font-extrabold px-3 py-1.5 rounded-lg text-lg tracking-wider">XP</div>
+                <div class="flex flex-col">
+                    <span class="text-slate-900 font-bold text-sm tracking-tight leading-none">X-POS</span>
+                    <span class="text-slate-400 font-semibold text-[10px] tracking-widest uppercase mt-0.5">LOGISTICS</span>
+                </div>
+            </div>
 
-            .custom-scrollbar::-webkit-scrollbar {
-                width: 6px;
-            }
+            <!-- MENU ITEM NAVIGATION -->
+            <div class="space-y-1">
+                <div class="nav-item active" id="menu-master">
+                    <a onclick="switchPage('master')" class="flex items-center gap-3 px-4 py-3 text-slate-900 font-bold text-sm rounded-xl cursor-pointer bg-slate-50 transition-all no-underline">
+                        <i class="fa-solid fa-layer-group text-base w-5 text-center text-slate-900"></i>Part Master
+                    </a>
+                </div>
+                <div class="nav-item" id="menu-order">
+                    <a onclick="switchPage('order')" class="flex items-center gap-3 px-4 py-3 text-slate-500 font-semibold text-sm rounded-xl cursor-pointer hover:bg-slate-50 hover:text-slate-900 transition-all no-underline">
+                        <i class="fa-solid fa-cart-shopping text-base w-5 text-center"></i>Part Order
+                    </a>
+                </div>
+                <div class="nav-item" id="menu-inquiry">
+                    <a onclick="switchPage('inquiry')" class="flex items-center gap-3 px-4 py-3 text-slate-500 font-semibold text-sm rounded-xl cursor-pointer hover:bg-slate-50 hover:text-slate-900 transition-all no-underline">
+                        <i class="fa-solid fa-magnifying-glass text-base w-5 text-center"></i>Part Inquiry
+                    </a>
+                </div>
+                <div class="nav-item" id="menu-claim">
+                    <a onclick="switchPage('claim')" class="flex items-center gap-3 px-4 py-3 text-slate-500 font-semibold text-sm rounded-xl cursor-pointer hover:bg-slate-50 hover:text-slate-900 transition-all no-underline">
+                        <i class="fa-solid fa-triangle-exclamation text-base w-5 text-center"></i>Part Claim
+                    </a>
+                </div>
+                <div class="nav-item" id="menu-claim-inq">
+                    <a onclick="switchPage('claim-inq')" class="flex items-center gap-3 px-4 py-3 text-slate-500 font-semibold text-sm rounded-xl cursor-pointer hover:bg-slate-50 hover:text-slate-900 transition-all no-underline">
+                        <i class="fa-solid fa-folder-open text-base w-5 text-center"></i>Claim Inquiry
+                    </a>
+                </div>
+            </div>
+        </div>
 
-            .custom-scrollbar::-webkit-scrollbar-track {
-                background: transparent;
-            }
+        <!-- PROFILE POJOK BAWAH -->
+        <div class="border-t border-slate-100 pt-4 flex flex-col gap-3">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-slate-100 rounded-xl flex items-center justify-center text-slate-600 font-bold"><i class="fa-solid fa-user"></i></div>
+                <div class="flex flex-col">
+                    <span class="text-slate-900 font-bold text-xs tracking-tight">XPENG SUNTER</span>
+                    <span class="text-slate-400 font-medium text-[10px]">AF00115</span>
+                </div>
+            </div>
+            <a href="#" class="text-red-500 font-bold text-[11px] no-underline flex items-center gap-2 px-1 hover:text-red-600 transition-colors"><i class="fa-solid fa-right-from-bracket"></i> Sign Out</a>
+        </div>
+    </div>
 
-            .custom-scrollbar::-webkit-scrollbar-thumb {
-                background: #e2e8f0;
-                border-radius: 10px;
-            }
-
-            .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-                background: #cbd5e1;
-            }
-        </style>
-        <script type="module" crossorigin>
-            var Tk = Object.defineProperty;
-            var bk = (r, e, t) => e in r ? Tk(r, e, {
-                enumerable: !0,
-                configurable: !0,
-                writable: !0,
-                value: t
-            }) : r[e] = t;
-            var Qe = (r, e, t) => bk(r, typeof e != "symbol" ? e + "" : e, t);
-            (function() {
-                const e = document.createElement("link").relList;
-                if (e && e.supports && e.supports("modulepreload"))
-                    return;
-                for (const a of document.querySelectorAll('link[rel="modulepreload"]'))
-                    n(a);
-                new MutationObserver(a => {
-                    for (const i of a)
-                        if (i.type === "childList")
-                            for (const o of i.addedNodes)
-                                o.tagName === "LINK" && o.rel === "modulepreload" && n(o)
-                }
-                ).observe(document, {
-                    childList: !0,
-                    subtree: !0
-                });
-                function t(a) {
-                    const i = {};
-                    return a.integrity && (i.integrity = a.integrity),
-                    a.referrerPolicy && (i.referrerPolicy = a.referrerPolicy),
-                    a.crossOrigin === "use-credentials" ? i.credentials = "include" : a.crossOrigin === "anonymous" ? i.credentials = "omit" : i.credentials = "same-origin",
-                    i
-                }
-                function n(a) {
-                    if (a.ep)
-                        return;
-                    a.ep = !0;
-                    const i = t(a);
-                    fetch(a.href, i)
-                }
-            }
-            )();
-            function pD(r) {
-                return r && r.__esModule && Object.prototype.hasOwnProperty.call(r, "default") ? r.default : r
-            }
-            var qg = {
-                exports: {}
-            }
-              , g0 = {};
+    <!-- 2. MAIN CONTENT AREA SEBELAH KANAN -->
+    <div class="main-content pl-[260px] w-full min-h-screen">
+        <div class="p-8 max-w-[1400px] mx-auto">
             
-            var d2;
-            function Ak() {
-                if (d2)
-                    return g0;
-                d2 = 1;
-                var r = Symbol.for("react.transitional.element")
-                  , e = Symbol.for("react.fragment");
-                function t(n, a, i) {
-                    var o = null;
-                    if (i !== void 0 && (o = "" + i),
-                    a.key !== void 0 && (o = "" + a.key),
-                    "key" in a) {
-                        i = {};
-                        for (var c in a)
-                            c !== "key" && (i[c] = a[c])
-                    } else
-                        i = a;
-                    return a = i.ref,
-                    {
-                        $$typeof: r,
-                        type: n,
-                        key: o,
-                        ref: a !== void 0 ? a : null,
-                        props: i
-                    }
-                }
-                return g0.Fragment = e,
-                g0.jsx = t,
-                g0.jsxs = t,
-                g0
-            }
-            var p2;
-            function Sk() {
-                return p2 || (p2 = 1,
-                qg.exports = Ak()),
-                qg.exports
-            }
-            var m = Sk()
-              , Jg = {
-                exports: {}
-            }
-              , At = {};
-            
-            var m2;
-            function Nk() {
-                if (m2)
-                    return At;
-                m2 = 1;
-                var r = Symbol.for("react.transitional.element")
-                  , e = Symbol.for("react.portal")
-                  , t = Symbol.for("react.fragment")
-                  , n = Symbol.for("react.strict_mode")
-                  , a = Symbol.for("react.profiler")
-                  , i = Symbol.for("react.consumer")
-                  , o = Symbol.for("react.context")
-                  , c = Symbol.for("react.forward_ref")
-                  , f = Symbol.for("react.suspense")
-                  , B = Symbol.for("react.memo")
-                  , d = Symbol.for("react.lazy")
-                  , x = Symbol.for("react.activity")
-                  , v = Symbol.iterator;
-                function E(re) {
-                    return re === null || typeof re != "object" ? null : (re = v && re[v] || re["@@iterator"],
-                    typeof re == "function" ? re : null)
-                }
-                var y = {
-                    isMounted: function() {
-                        return !1
-                    },
-                    enqueueForceUpdate: function() {},
-                    enqueueReplaceState: function() {},
-                    enqueueSetState: function() {}
-                }
-                  , _ = Object.assign
-                  , T = {};
-                function R(re, j, Z) {
-                    this.props = re,
-                    this.context = j,
-                    this.refs = T,
-                    this.updater = Z || y
-                }
-                R.prototype.isReactComponent = {},
-                R.prototype.setState = function(re, j) {
-                    if (typeof re != "object" && typeof re != "function" && re != null)
-                        throw Error("takes an object of state variables to update or a function which returns an object of state variables.");
-                    this.updater.enqueueSetState(this, re, j, "setState")
-                }
-                ,
-                R.prototype.forceUpdate = function(re) {
-                    this.updater.enqueueForceUpdate(this, re, "forceUpdate")
-                }
-                ;
-                function P() {}
-                P.prototype = R.prototype;
-                function I(re, j, Z) {
-                    this.props = re,
-                    this.context = j,
-                    this.refs = T,
-                    this.updater = Z || y
-                }
-                var Q = I.prototype = new P;
-                Q.constructor = I,
-                _(Q, R.prototype),
-                Q.isPureReactComponent = !0;
-                var ae = Array.isArray;
-                function Y() {}
-                var b = {
-                    H: null,
-                    A: null,
-                    T: null,
-                    S: null
-                }
-                  , N = Object.prototype.hasOwnProperty;
-            </script>
-    </head>
-    <body>
-        <!-- Area Render Utama React App (Layout Asli Anda) -->
-        <div id="root"></div>
+            <!-- HALAMAN MASTER -->
+            <div id="page-master" class="page-section active">
+                <div class="mb-8">
+                    <h1 class="text-2xl font-extrabold text-slate-900 tracking-tight">MASTER</h1>
+                    <div class="flex items-center gap-2 text-slate-400 font-semibold text-[11px] uppercase tracking-wider mt-1">
+                        <span class="w-2 h-2 rounded-full bg-emerald-500 inline-block animate-pulse"></span> TERMINAL: AF00115
+                    </div>
+                </div>
 
-        <!-- ================================================================= -->
-        <!-- CORE DRIVER LOGIC: MENYAMBUNG TOMBOL ASLI TANPA MERUSAK VISUAL    -->
-        <!-- ================================================================= -->
-        <script>
-            window.addEventListener('DOMContentLoaded', () => {
-                // Menunggu inisialisasi render visual selesai 1.5 detik
-                setTimeout(() => {
-                    const buttons = document.querySelectorAll('button');
-                    let queryBtn = null;
-                    let resetBtn = null;
+                <!-- DISPLAY KARTU UTAMA -->
+                <div class="bg-white border border-slate-100 rounded-3xl p-8 shadow-sm min-h-[560px]">
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                        
+                        <!-- PANEL BOX KIRI (INVENTORY SEARCH) -->
+                        <div class="lg:col-span-5 lg:border-r lg:border-slate-100 lg:pr-8">
+                            <div class="flex items-center gap-2 text-slate-900 font-extrabold text-xs tracking-wider uppercase mb-1">
+                                <span class="bg-slate-900 text-white text-[10px] px-1.5 py-0.5 rounded">#</span> Inventory Search
+                            </div>
+                            <p class="text-slate-400 font-medium text-xs mb-6">Input specific part numbers to check current stock availability.</p>
 
-                    buttons.forEach(btn => {
-                        if (btn.innerText.toLowerCase().includes('query')) { queryBtn = btn; }
-                        if (btn.innerText.toLowerCase().includes('reset')) { resetBtn = btn; }
-                    });
+                            <!-- INPUT BOX 10 GRID -->
+                            <div class="grid grid-cols-2 gap-3 mb-6">
+                                <div><input type="text" class="part-input w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs font-semibold text-slate-700 transition-all placeholder-slate-300" placeholder="1  Part Number"></div>
+                                <div><input type="text" class="part-input w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs font-semibold text-slate-700 transition-all placeholder-slate-300" placeholder="2  Part Number"></div>
+                                <div><input type="text" class="part-input w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs font-semibold text-slate-700 transition-all placeholder-slate-300" placeholder="3  Part Number"></div>
+                                <div><input type="text" class="part-input w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs font-semibold text-slate-700 transition-all placeholder-slate-300" placeholder="4  Part Number"></div>
+                                <div><input type="text" class="part-input w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs font-semibold text-slate-700 transition-all placeholder-slate-300" placeholder="5  Part Number"></div>
+                                <div><input type="text" class="part-input w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs font-semibold text-slate-700 transition-all placeholder-slate-300" placeholder="6  Part Number"></div>
+                                <div><input type="text" class="part-input w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs font-semibold text-slate-700 transition-all placeholder-slate-300" placeholder="7  Part Number"></div>
+                                <div><input type="text" class="part-input w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs font-semibold text-slate-700 transition-all placeholder-slate-300" placeholder="8  Part Number"></div>
+                                <div><input type="text" class="part-input w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs font-semibold text-slate-700 transition-all placeholder-slate-300" placeholder="9  Part Number"></div>
+                                <div><input type="text" class="part-input w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs font-semibold text-slate-700 transition-all placeholder-slate-300" placeholder="10 Part Number"></div>
+                            </div>
 
-                    // Mengamankan pemicu agar kebal refresh halaman otomatis
-                    if (queryBtn) {
-                        queryBtn.type = "button"; 
-                        queryBtn.addEventListener('click', (e) => {
-                            e.preventDefault();
-                            executeLiveStockSystem();
-                        });
-                    }
-
-                    if (resetBtn) {
-                        resetBtn.type = "button";
-                        resetBtn.addEventListener('click', () => {
-                            document.querySelectorAll('input').forEach(inp => inp.value = '');
-                            resetOutputDisplayCard();
-                        });
-                    }
-                }, 1500); 
-            });
-
-            function resetOutputDisplayCard() {
-                const containers = document.querySelectorAll('div');
-                containers.forEach(div => {
-                    if (div.innerText.includes('AWAITING') || div.innerText.includes('RESULTS') || div.innerHTML.includes('table')) {
+                            <div class="flex items-center gap-3">
+                                <button onclick="executeLiveStockQuery()" type="button" class="bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs tracking-wide px-6 py-3 rounded-xl transition-all shadow-sm flex items-center justify-center gap-2"><i class="fa-solid fa-magnifying-glass"></i> Query Stock</button>
