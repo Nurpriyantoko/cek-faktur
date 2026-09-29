@@ -9,51 +9,36 @@
     <link rel="stylesheet" href="https://cloudflare.com">
     <style>
         body { font-family: 'Nunito', sans-serif; background-color: #f4f6f9; margin: 0; padding: 0; color: #333; }
-        
-        /* Sidebar Style Premium meniru Gambar X-POS */
         .sidebar-container { background-color: #ffffff; min-height: 100vh; padding: 1.5rem 1rem; position: fixed; top: 0; left: 0; width: 250px; z-index: 1000; border-right: 1px solid #e3e6f0; }
         .sidebar-brand { display: flex; align-items: center; padding: 0.5rem; margin-bottom: 2rem; text-decoration: none; }
         .brand-logo { background-color: #1a202c; color: #fff; font-weight: 800; padding: 0.5rem 0.8rem; border-radius: 0.5rem; font-size: 1.1rem; margin-right: 0.7rem; }
         .brand-text { color: #1a202c; font-weight: 700; font-size: 1rem; line-height: 1.1; }
         .brand-text span { display: block; font-size: 0.75rem; color: #718096; font-weight: 400; letter-spacing: 0.05rem; }
-        
         .nav-item { margin-bottom: 0.4rem; }
         .nav-link { color: #4a5568; font-weight: 600; display: block; padding: 0.7rem 1rem; text-decoration: none; border-radius: 0.5rem; transition: all 0.2s; cursor: pointer; font-size: 0.9rem; }
         .nav-link:hover { color: #1a202c; background-color: #f7fafc; text-decoration: none; }
         .nav-item.active .nav-link { color: #2d3748; background-color: #edf2f7; font-weight: 700; }
-        
         .user-profile { position: absolute; bottom: 1.5rem; left: 1rem; width: calc(100% - 2rem); padding-top: 1rem; border-top: 1px solid #edf2f7; font-size: 0.85rem; }
-        
-        /* Main Content Area */
-        .main-content { margin-left: 250px; padding: 2.5rem; background-color: #f4f6f9; min-height: 100vh; }
+        .main-content { margin-left: 250px; padding: 2rem 2.5rem; background-color: #f4f6f9; min-height: 100vh; }
         .page-header { margin-bottom: 2rem; }
         .page-title { font-size: 1.5rem; font-weight: 800; color: #1a202c; text-transform: uppercase; margin: 0; }
         .page-subtitle { font-size: 0.8rem; color: #718096; margin-top: 0.2rem; display: flex; align-items: center; }
-        
-        /* Card Layout Meniru Gambar X-POS */
         .search-card { background-color: #ffffff; border: none; border-radius: 1rem; box-shadow: 0 0.5rem 1.5rem rgba(0,0,0,0.02); padding: 2rem; min-height: 520px; }
         .section-title { font-size: 0.95rem; font-weight: 800; color: #1a202c; letter-spacing: 0.05rem; display: flex; align-items: center; margin-bottom: 0.5rem; }
         .section-subtitle { font-size: 0.8rem; color: #a0aec0; margin-bottom: 1.5rem; }
-        
-        /* Input Form Style rounded putih */
         .form-control-custom { background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 0.6rem; padding: 0.6rem 1rem; font-size: 0.85rem; color: #4a5568; height: auto; transition: all 0.2s; }
         .form-control-custom:focus { border-color: #cbd5e0; box-shadow: none; background-color: #fff; }
         .form-control-custom::placeholder { color: #cbd5e0; }
-        
-        /* Button Style X-POS */
         .btn-query { background-color: #1a202c; color: #ffffff; font-weight: 700; font-size: 0.9rem; padding: 0.75rem 2rem; border-radius: 0.6rem; border: none; transition: background-color 0.2s; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; }
         .btn-query:hover { background-color: #2d3748; color: #fff; }
         .btn-reset { background-color: transparent; color: #4a5568; font-weight: 600; font-size: 0.9rem; padding: 0.75rem 1.5rem; border-radius: 0.6rem; border: 1px solid #e2e8f0; transition: all 0.2s; margin-left: 0.5rem; cursor: pointer; }
         .btn-reset:hover { background-color: #f7fafc; color: #1a202c; }
-        
-        /* Output Tampilan Kanan Minimalis Elegan */
         .output-container { background-color: #ffffff; border: 1px solid #edf2f7; border-radius: 1rem; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; min-height: 440px; padding: 1.5rem; width: 100%; box-shadow: 0 0.5rem 1.5rem rgba(0,0,0,0.01); }
         .table-result { width: 100%; text-align: left; color: #2d3748; font-size: 0.8rem; border-collapse: separate; border-spacing: 0 0.5rem; }
-        .table-result th { color: #a0aec0; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05rem; border: none; padding-bottom: 1rem; }
+        .table-result th { color: #a0aec0; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05rem; border: none; padding-bottom: 0.5rem; }
         .table-result td { vertical-align: middle; padding: 1rem 0.75rem; background-color: #fff; border: none; }
         .table-result tbody tr { box-shadow: 0 0.2rem 1rem rgba(0,0,0,0.02); border-radius: 0.5rem; transition: transform 0.15s; }
         .table-result tbody tr:hover { transform: translateY(-2px); }
-        
         .page-section { display: none; }
         .page-section.active { display: block; }
     </style>
@@ -66,30 +51,15 @@
             <div class="brand-logo">XP</div>
             <div class="brand-text">X-POS<span>LOGISTICS</span></div>
         </a>
-        
-        <div class="nav-item active" id="menu-master">
-            <a class="nav-link" onclick="switchPage('master')"><i class="fas fa-th-large mr-3"></i>Part Master</a>
-        </div>
-        <div class="nav-item" id="menu-order">
-            <a class="nav-link" onclick="switchPage('order')"><i class="fas fa-shopping-cart mr-3"></i>Part Order</a>
-        </div>
-        <div class="nav-item" id="menu-inquiry">
-            <a class="nav-link" onclick="switchPage('inquiry')"><i class="fas fa-search mr-3"></i>Part Inquiry</a>
-        </div>
-        <div class="nav-item" id="menu-claim">
-            <a class="nav-link" onclick="switchPage('claim')"><i class="fas fa-exclamation-triangle mr-3"></i>Part Claim</a>
-        </div>
-        <div class="nav-item" id="menu-claim-inq">
-            <a class="nav-link" onclick="switchPage('claim-inq')"><i class="fas fa-folder-open mr-3"></i>Claim Inquiry</a>
-        </div>
-        
+        <div class="nav-item active" id="menu-master"><a class="nav-link" onclick="switchPage('master')"><i class="fas fa-th-large mr-3"></i>Part Master</a></div>
+        <div class="nav-item" id="menu-order"><a class="nav-link" onclick="switchPage('order')"><i class="fas fa-shopping-cart mr-3"></i>Part Order</a></div>
+        <div class="nav-item" id="menu-inquiry"><a class="nav-link" onclick="switchPage('inquiry')"><i class="fas fa-search mr-3"></i>Part Inquiry</a></div>
+        <div class="nav-item" id="menu-claim"><a class="nav-link" onclick="switchPage('claim')"><i class="fas fa-exclamation-triangle mr-3"></i>Part Claim</a></div>
+        <div class="nav-item" id="menu-claim-inq"><a class="nav-link" onclick="switchPage('claim-inq')"><i class="fas fa-folder-open mr-3"></i>Claim Inquiry</a></div>
         <div class="user-profile text-muted">
             <div class="d-flex align-items-center">
                 <div class="bg-light rounded-circle p-2 mr-2 text-center" style="width:35px; height:35px;"><i class="fas fa-user text-secondary"></i></div>
-                <div>
-                    <strong class="text-dark d-block" style="font-size:0.8rem;">XPENG SUNTER</strong>
-                    <span style="font-size:0.7rem; color:#a0aec0;">AF00115</span>
-                </div>
+                <div><strong class="text-dark d-block" style="font-size:0.8rem;">XPENG SUNTER</strong><span style="font-size:0.7rem; color:#a0aec0;">AF00115</span></div>
             </div>
         </div>
     </div>
@@ -101,15 +71,13 @@
                 <h1 class="page-title">Master</h1>
                 <div class="page-subtitle"><i class="fas fa-circle text-success mr-2" style="font-size:0.5rem;"></i> TERMINAL: AF00115</div>
             </div>
-            
             <div class="card search-card">
                 <div class="row">
-                    <!-- KOLOM INPUT SISI KIRI -->
+                    <!-- INPUT FORM -->
                     <div class="col-md-5 border-right pr-4">
                         <div class="section-title"><span class="brand-logo p-1 px-2 mr-2" style="font-size:0.75rem;">#</span> INVENTORY SEARCH</div>
                         <div class="section-subtitle">Input specific part numbers to check current stock availability.</div>
-                        
-                        <div>
+                        <form id="stockForm">
                             <div class="row">
                                 <div class="col-6 mb-3"><input type="text" class="form-control form-control-custom part-input" placeholder="1  Part Number"></div>
                                 <div class="col-6 mb-3"><input type="text" class="form-control form-control-custom part-input" placeholder="2  Part Number"></div>
@@ -122,7 +90,17 @@
                                 <div class="col-6 mb-3"><input type="text" class="form-control form-control-custom part-input" placeholder="9  Part Number"></div>
                                 <div class="col-6 mb-3"><input type="text" class="form-control form-control-custom part-input" placeholder="10 Part Number"></div>
                             </div>
-                            
                             <div class="mt-3">
-                                <!-- PERBAIKAN: Mengubah type menjadi button agar bebas dari bug refresh tanda tanya browser -->
-                                <button type="button" class="btn-query shadow-sm" id="btnQuery" onclick="jalankanPencarianStok()"><i class="fas fa-search mr-2"></i> Query Stock</button>
+                                <button type="submit" class="btn-query shadow-sm" id="btnQuery"><i class="fas fa-search mr-2"></i> Query Stock</button>
+                                <button type="button" class="btn-reset" id="btnReset"><i class="fas fa-redo mr-2"></i> Reset</button>
+                            </div>
+                        </form>
+                    </div>
+                    <!-- DISPLAY AREA -->
+                    <div class="col-md-7 pl-4">
+                        <div id="outputArea" class="output-container"><span id="defaultText" class="text-muted font-weight-bold">AWAITING QUERY INPUT</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="page-order" class="page-section"><div class="card search-card p-4"><h5>Halaman Part Order sedang disinkronisasikan...</h5></div></div>
