@@ -1,200 +1,246 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>X-POS | Logistics Cloud Terminal</title>
-    <!-- Jalur Desain Ganda Anti Gagal Memuat -->
-    <link rel="stylesheet" href="https://jsdelivr.net">
-    <script src="https://tailwindcss.com"></script>
-    <link href="https://googleapis.com" rel="stylesheet">
-    <link rel="stylesheet" href="https://cloudflare.com">
-    <style>
-        body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            overflow-x: hidden;
-            background-color: #f8fafc;
-            margin: 0;
-            padding: 0;
-        }
-        .sidebar-container {
-            background-color: #ffffff;
-            min-height: 100vh;
-            padding: 1.5rem;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 260px;
-            z-index: 1000;
-            border-right: 1px solid #edf2f7;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-        .main-content {
-            margin-left: 260px;
-            padding: 2rem;
-            min-height: 100vh;
-            width: calc(100% - 260px);
-        }
-        .search-card {
-            background-color: #ffffff;
-            border: 1px solid #edf2f7;
-            border-radius: 1.25rem;
-            padding: 2rem;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.01), 0 2px 4px -1px rgba(0, 0, 0, 0.01);
-        }
-        .form-control-custom {
-            background-color: #f8fafc;
-            border: 1px solid #e2e8f0;
-            border-radius: 0.75rem;
-            padding: 0.625rem 1rem;
-            font-size: 0.75rem;
-            font-weight: 600;
-            color: #334155;
-            height: auto;
-            width: 100%;
-            transition: all 0.2s;
-        }
-        .form-control-custom:focus {
-            outline: none;
-            background-color: #fff;
-            border-color: #0f172a;
-            box-shadow: 0 0 0 4px rgba(15, 23, 42, 0.05);
-        }
-        .btn-query {
-            background-color: #0f172a;
-            color: #ffffff;
-            font-weight: 700;
-            font-size: 0.75rem;
-            padding: 0.75rem 1.5rem;
-            border-radius: 0.75rem;
-            border: none;
-            cursor: pointer;
-            transition: background-color 0.2s;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        .btn-query:hover { background-color: #1e293b; color: #fff; }
-        .btn-reset {
-            background-color: transparent;
-            color: #64748b;
-            font-weight: 700;
-            font-size: 0.75rem;
-            padding: 0.75rem 1.25rem;
-            border-radius: 0.75rem;
-            border: 1px solid #e2e8f0;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        .btn-reset:hover { background-color: #f8fafc; color: #0f172a; }
-        .output-container {
-            background-color: #ffffff;
-            border: 1px dashed #e2e8f0;
-            border-radius: 1rem;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 440px;
-            padding: 1.5rem;
-            text-align: center;
-            width: 100%;
-            height: 100%;
-        }
-        .page-section { display: none; }
-        .page-section.active { display: block; }
-        .nav-link-custom {
-            color: #475569;
-            font-weight: 600;
-            font-size: 0.875rem;
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            padding: 0.75rem 1rem;
-            text-decoration: none;
-            border-radius: 0.75rem;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        .nav-link-custom:hover, .nav-item.active .nav-link-custom {
-            color: #0f172a;
-            background-color: #f8fafc;
-            font-weight: 700;
-            text-decoration: none;
-        }
-    </style>
-</head>
-<body>
+    <head>
+        <meta charset="UTF-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <title>X-POS | Logistics Cloud Terminal</title>
+        <script src="https://tailwindcss.com"></script>
+        <link href="https://googleapis.com" rel="stylesheet">
+        <link rel="stylesheet" href="https://cloudflare.com">
+        <style>
+            body {
+                font-family: 'Plus Jakarta Sans', sans-serif;
+                overflow-x: hidden;
+                background-color: #f8fafc;
+            }
 
-    <!-- 1. SIDEBAR KIRI FIXED -->
-    <div class="sidebar-container">
-        <div>
-            <!-- LOGO BRAND -->
-            <div class="d-flex align-items-center" style="gap: 0.75rem; margin-bottom: 2rem; padding-left: 0.5rem;">
-                <div style="background-color: #0f172a; color: #fff; font-weight: 800; padding: 0.375rem 0.75rem; border-radius: 0.5rem; font-size: 1.125rem; tracking-content: 0.05em;">XP</div>
-                <div class="d-flex flex-column" style="line-height: 1;">
-                    <span style="color: #0f172a; font-weight: 700; font-size: 0.875rem;">X-POS</span>
-                    <span style="color: #94a3b8; font-weight: 600; font-size: 0.625rem; letter-spacing: 0.05em; text-transform: uppercase; margin-top: 0.125rem;">LOGISTICS</span>
-                </div>
-            </div>
+            input:focus, textarea:focus, select:focus {
+                outline: none;
+                border-color: #1e293b !important;
+                box-shadow: 0 0 0 4px rgba(30, 41, 59, 0.05) !important;
+            }
 
-            <!-- MENU ITEM LINKS -->
-            <div class="nav-item active" id="menu-master" style="margin-bottom: 0.25rem;">
-                <a onclick="switchPage('master')" class="nav-link-custom"><i class="fa-solid fa-layer-group" style="width: 1.25rem; text-align: center;"></i>Part Master</a>
-            </div>
-            <div class="nav-item" id="menu-order" style="margin-bottom: 0.25rem;">
-                <a onclick="switchPage('order')" class="nav-link-custom"><i class="fa-solid fa-cart-shopping" style="width: 1.25rem; text-align: center;"></i>Part Order</a>
-            </div>
-            <div class="nav-item" id="menu-inquiry" style="margin-bottom: 0.25rem;">
-                <a onclick="switchPage('inquiry')" class="nav-link-custom"><i class="fa-solid fa-magnifying-glass" style="width: 1.25rem; text-align: center;"></i>Part Inquiry</a>
-            </div>
-            <div class="nav-item" id="menu-claim" style="margin-bottom: 0.25rem;">
-                <a onclick="switchPage('claim')" class="nav-link-custom"><i class="fa-solid fa-triangle-exclamation" style="width: 1.25rem; text-align: center;"></i>Part Claim</a>
-            </div>
-            <div class="nav-item" id="menu-claim-inq" style="margin-bottom: 0.25rem;">
-                <a onclick="switchPage('claim-inq')" class="nav-link-custom"><i class="fa-solid fa-folder-open" style="width: 1.25rem; text-align: center;"></i>Claim Inquiry</a>
-            </div>
-        </div>
+            .custom-scrollbar::-webkit-scrollbar {
+                width: 6px;
+            }
 
-        <!-- PROFILE POJOK BAWAH -->
-        <div style="border-top: 1px solid #edf2f7; padding-top: 1rem;">
-            <div class="d-flex align-items-center" style="gap: 0.75rem; margin-bottom: 0.75rem;">
-                <div style="width: 2.5rem; height: 2.5rem; background-color: #f1f5f9; border-radius: 0.75rem; display: flex; align-items: center; justify-content: center; color: #64748b; font-weight: bold;"><i class="fa-solid fa-user"></i></div>
-                <div class="d-flex flex-column" style="line-height: 1.2;">
-                    <span style="color: #0f172a; font-weight: 700; font-size: 0.75rem;">XPENG SUNTER</span>
-                    <span style="color: #94a3b8; font-weight: 500; font-size: 0.625rem;">AF00115</span>
-                </div>
-            </div>
-            <a href="#" style="color: #ef4444; font-weight: 700; font-size: 0.6875rem; text-decoration: none; display: flex; align-items: center; gap: 0.5rem; padding-left: 0.25rem;"><i class="fa-solid fa-right-from-bracket"></i> Sign Out</a>
-        </div>
-    </div>
+            .custom-scrollbar::-webkit-scrollbar-track {
+                background: transparent;
+            }
 
-    <!-- 2. MAIN CONTENT HUB SISI KANAN -->
-    <div class="main-content">
-        
-        <!-- SECTION: PART MASTER -->
-        <div id="page-master" class="page-section active">
-            <div style="margin-bottom: 2rem;">
-                <h1 style="font-size: 1.5rem; font-weight: 800; color: #0f172a; margin: 0; tracking: -0.025em;">MASTER</h1>
-                <div style="font-size: 0.6875rem; color: #94a3b8; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-top: 0.25rem; display: flex; align-items: center; gap: 0.5rem;">
-                    <span style="width: 0.5rem; height: 0.5rem; border-radius: 50%; background-color: #10b981; display: inline-block;"></span> TERMINAL: AF00115
-                </div>
-            </div>
+            .custom-scrollbar::-webkit-scrollbar-thumb {
+                background: #e2e8f0;
+                border-radius: 10px;
+            }
 
-            <!-- CARD GRID SYSTEM BANNER -->
-            <div class="search-card">
-                <div class="row">
-                    <!-- INPUT FIELD CONTAINER -->
-                    <div class="col-lg-5 border-right" style="padding-right: 2rem;">
-                        <div style="color: #0f172a; font-weight: 800; font-size: 0.75rem; letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 0.25rem;">
-                            <span style="background-color: #0f172a; color: #fff; font-size: 0.625rem; padding: 0.125rem 0.375rem; border-radius: 0.25rem; margin-right: 0.25rem;">#</span> Inventory Search
-                        </div>
-                        <p style="color: #94a3b8; font-weight: 500; font-size: 0.75rem; margin-bottom: 1.5rem;">Input specific part numbers to check current stock availability.</p>
+            .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+                background: #cbd5e1;
+            }
+        </style>
+        <script type="module" crossorigin>
+            var Tk = Object.defineProperty;
+            var bk = (r, e, t) => e in r ? Tk(r, e, {
+                enumerable: !0,
+                configurable: !0,
+                writable: !0,
+                value: t
+            }) : r[e] = t;
+            var Qe = (r, e, t) => bk(r, typeof e != "symbol" ? e + "" : e, t);
+            (function() {
+                const e = document.createElement("link").relList;
+                if (e && e.supports && e.supports("modulepreload"))
+                    return;
+                for (const a of document.querySelectorAll('link[rel="modulepreload"]'))
+                    n(a);
+                new MutationObserver(a => {
+                    for (const i of a)
+                        if (i.type === "childList")
+                            for (const o of i.addedNodes)
+                                o.tagName === "LINK" && o.rel === "modulepreload" && n(o)
+                }
+                ).observe(document, {
+                    childList: !0,
+                    subtree: !0
+                });
+                function t(a) {
+                    const i = {};
+                    return a.integrity && (i.integrity = a.integrity),
+                    a.referrerPolicy && (i.referrerPolicy = a.referrerPolicy),
+                    a.crossOrigin === "use-credentials" ? i.credentials = "include" : a.crossOrigin === "anonymous" ? i.credentials = "omit" : i.credentials = "same-origin",
+                    i
+                }
+                function n(a) {
+                    if (a.ep)
+                        return;
+                    a.ep = !0;
+                    const i = t(a);
+                    fetch(a.href, i)
+                }
+            }
+            )();
+            function pD(r) {
+                return r && r.__esModule && Object.prototype.hasOwnProperty.call(r, "default") ? r.default : r
+            }
+            var qg = {
+                exports: {}
+            }
+              , g0 = {};
+            
+            var d2;
+            function Ak() {
+                if (d2)
+                    return g0;
+                d2 = 1;
+                var r = Symbol.for("react.transitional.element")
+                  , e = Symbol.for("react.fragment");
+                function t(n, a, i) {
+                    var o = null;
+                    if (i !== void 0 && (o = "" + i),
+                    a.key !== void 0 && (o = "" + a.key),
+                    "key" in a) {
+                        i = {};
+                        for (var c in a)
+                            c !== "key" && (i[c] = a[c])
+                    } else
+                        i = a;
+                    return a = i.ref,
+                    {
+                        $$typeof: r,
+                        type: n,
+                        key: o,
+                        ref: a !== void 0 ? a : null,
+                        props: i
+                    }
+                }
+                return g0.Fragment = e,
+                g0.jsx = t,
+                g0.jsxs = t,
+                g0
+            }
+            var p2;
+            function Sk() {
+                return p2 || (p2 = 1,
+                qg.exports = Ak()),
+                qg.exports
+            }
+            var m = Sk()
+              , Jg = {
+                exports: {}
+            }
+              , At = {};
+            
+            var m2;
+            function Nk() {
+                if (m2)
+                    return At;
+                m2 = 1;
+                var r = Symbol.for("react.transitional.element")
+                  , e = Symbol.for("react.portal")
+                  , t = Symbol.for("react.fragment")
+                  , n = Symbol.for("react.strict_mode")
+                  , a = Symbol.for("react.profiler")
+                  , i = Symbol.for("react.consumer")
+                  , o = Symbol.for("react.context")
+                  , c = Symbol.for("react.forward_ref")
+                  , f = Symbol.for("react.suspense")
+                  , B = Symbol.for("react.memo")
+                  , d = Symbol.for("react.lazy")
+                  , x = Symbol.for("react.activity")
+                  , v = Symbol.iterator;
+                function E(re) {
+                    return re === null || typeof re != "object" ? null : (re = v && re[v] || re["@@iterator"],
+                    typeof re == "function" ? re : null)
+                }
+                var y = {
+                    isMounted: function() {
+                        return !1
+                    },
+                    enqueueForceUpdate: function() {},
+                    enqueueReplaceState: function() {},
+                    enqueueSetState: function() {}
+                }
+                  , _ = Object.assign
+                  , T = {};
+                function R(re, j, Z) {
+                    this.props = re,
+                    this.context = j,
+                    this.refs = T,
+                    this.updater = Z || y
+                }
+                R.prototype.isReactComponent = {},
+                R.prototype.setState = function(re, j) {
+                    if (typeof re != "object" && typeof re != "function" && re != null)
+                        throw Error("takes an object of state variables to update or a function which returns an object of state variables.");
+                    this.updater.enqueueSetState(this, re, j, "setState")
+                }
+                ,
+                R.prototype.forceUpdate = function(re) {
+                    this.updater.enqueueForceUpdate(this, re, "forceUpdate")
+                }
+                ;
+                function P() {}
+                P.prototype = R.prototype;
+                function I(re, j, Z) {
+                    this.props = re,
+                    this.context = j,
+                    this.refs = T,
+                    this.updater = Z || y
+                }
+                var Q = I.prototype = new P;
+                Q.constructor = I,
+                _(Q, R.prototype),
+                Q.isPureReactComponent = !0;
+                var ae = Array.isArray;
+                function Y() {}
+                var b = {
+                    H: null,
+                    A: null,
+                    T: null,
+                    S: null
+                }
+                  , N = Object.prototype.hasOwnProperty;
+            </script>
+    </head>
+    <body>
+        <!-- Area Render Utama React App (Layout Asli Anda) -->
+        <div id="root"></div>
 
-                        <!-- GRID FIELD INPUT 10 SEKAT -->
-                        <div class="row" style="margin-left: -5px; margin-right: -5px;">
-                            <div class="col-6" style="padding: 0 5px; margin-bottom: 0.75rem;"><input type="text" class="part-input form-control-custom" placeholder="1  Part Number"></div>
-                            <div class="col-6" style="padding: 0 5px; margin-bottom: 0.75rem;"><input type="text" class="part-input form-control-custom" placeholder="2  Part Number"></div>
-                            <div class="col-6" style="padding: 0 5px; margin-bottom: 0.75rem;"><input type="text" class="part-input form-control-custom" placeholder="3  Part Number"></div>
+        <!-- ================================================================= -->
+        <!-- CORE DRIVER LOGIC: MENYAMBUNG TOMBOL ASLI TANPA MERUSAK VISUAL    -->
+        <!-- ================================================================= -->
+        <script>
+            window.addEventListener('DOMContentLoaded', () => {
+                // Menunggu inisialisasi render visual selesai 1.5 detik
+                setTimeout(() => {
+                    const buttons = document.querySelectorAll('button');
+                    let queryBtn = null;
+                    let resetBtn = null;
+
+                    buttons.forEach(btn => {
+                        if (btn.innerText.toLowerCase().includes('query')) { queryBtn = btn; }
+                        if (btn.innerText.toLowerCase().includes('reset')) { resetBtn = btn; }
+                    });
+
+                    // Mengamankan pemicu agar kebal refresh halaman otomatis
+                    if (queryBtn) {
+                        queryBtn.type = "button"; 
+                        queryBtn.addEventListener('click', (e) => {
+                            e.preventDefault();
+                            executeLiveStockSystem();
+                        });
+                    }
+
+                    if (resetBtn) {
+                        resetBtn.type = "button";
+                        resetBtn.addEventListener('click', () => {
+                            document.querySelectorAll('input').forEach(inp => inp.value = '');
+                            resetOutputDisplayCard();
+                        });
+                    }
+                }, 1500); 
+            });
+
+            function resetOutputDisplayCard() {
+                const containers = document.querySelectorAll('div');
+                containers.forEach(div => {
+                    if (div.innerText.includes('AWAITING') || div.innerText.includes('RESULTS') || div.innerHTML.includes('table')) {
