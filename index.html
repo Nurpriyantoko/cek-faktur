@@ -3,14 +3,14 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>X-POS Logistics - Part Master Global</title>
+    <title>X-POS Logistics - Part Master Dynamic</title>
     <!-- Memuat link desain resmi Bootstrap dan ikon FontAwesome via online -->
     <link rel="stylesheet" href="https://jsdelivr.net">
     <link rel="stylesheet" href="https://cloudflare.com">
     <style>
         body { font-family: 'Nunito', sans-serif; background-color: #f4f6f9; margin: 0; padding: 0; color: #333; }
         
-        /* Sidebar Style meniru Gambar X-POS */
+        /* Sidebar Style Premium meniru Gambar X-POS */
         .sidebar-container { background-color: #ffffff; min-height: 100vh; padding: 1.5rem 1rem; position: fixed; top: 0; left: 0; width: 250px; z-index: 1000; border-right: 1px solid #e3e6f0; }
         .sidebar-brand { display: flex; align-items: center; padding: 0.5rem; margin-bottom: 2rem; text-decoration: none; }
         .brand-logo { background-color: #1a202c; color: #fff; font-weight: 800; padding: 0.5rem 0.8rem; border-radius: 0.5rem; font-size: 1.1rem; margin-right: 0.7rem; }
@@ -46,18 +46,21 @@
         .btn-reset { background-color: transparent; color: #4a5568; font-weight: 600; font-size: 0.9rem; padding: 0.75rem 1.5rem; border-radius: 0.6rem; border: 1px solid #e2e8f0; transition: all 0.2s; margin-left: 0.5rem; cursor: pointer; }
         .btn-reset:hover { background-color: #f7fafc; color: #1a202c; }
         
-        /* Output Tampilan Kanan */
-        .output-container { background-color: #ffffff; border: 1px dashed #e2e8f0; border-radius: 1rem; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; min-height: 440px; text-align: center; color: #a0aec0; font-size: 0.9rem; font-weight: 600; letter-spacing: 0.05rem; padding: 1.5rem; width: 100%; }
-        .table-result { width: 100%; text-align: left; color: #2d3748; font-size: 0.8rem; }
+        /* Output Tampilan Kanan Minimalis Elegan */
+        .output-container { background-color: #ffffff; border: 1px solid #edf2f7; border-radius: 1rem; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; min-height: 440px; padding: 1.5rem; width: 100%; box-shadow: 0 0.5rem 1.5rem rgba(0,0,0,0.01); }
+        .table-result { width: 100%; text-align: left; color: #2d3748; font-size: 0.8rem; border-collapse: separate; border-spacing: 0 0.5rem; }
+        .table-result th { color: #a0aec0; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05rem; border: none; padding-bottom: 1rem; }
+        .table-result td { vertical-align: middle; padding: 1rem 0.75rem; background-color: #fff; border: none; }
+        .table-result tbody tr { box-shadow: 0 0.2rem 1rem rgba(0,0,0,0.02); border-radius: 0.5rem; transition: transform 0.15s; }
+        .table-result tbody tr:hover { transform: translateY(-2px); }
         
-        /* Tab Controller */
         .page-section { display: none; }
         .page-section.active { display: block; }
     </style>
 </head>
 <body>
 
-    <!-- 1. SIDEBAR MENU (SISI KIRI - STYLE NEW X-POS) -->
+    <!-- 1. SIDEBAR MENU SISI KIRI -->
     <div class="sidebar-container">
         <a class="sidebar-brand" href="#">
             <div class="brand-logo">XP</div>
@@ -76,6 +79,9 @@
         <div class="nav-item" id="menu-claim">
             <a class="nav-link" onclick="switchPage('claim')"><i class="fas fa-exclamation-triangle mr-3"></i>Part Claim</a>
         </div>
+        <div class="nav-item" id="menu-claim-inq">
+            <a class="nav-link" onclick="switchPage('claim-inq')"><i class="fas fa-folder-open mr-3"></i>Claim Inquiry</a>
+        </div>
         
         <div class="user-profile text-muted">
             <div class="d-flex align-items-center">
@@ -88,10 +94,8 @@
         </div>
     </div>
 
-    <!-- 2. MAIN CONTENT AREA (SISI KANAN) -->
+    <!-- 2. AREA KONTEN UTAMA SISI KANAN -->
     <div class="main-content">
-        
-        <!-- HALAMAN UTAMA: PART MASTER (INVENTORY SEARCH) -->
         <div id="page-master" class="page-section active">
             <div class="page-header">
                 <h1 class="page-title">Master</h1>
@@ -100,7 +104,7 @@
             
             <div class="card search-card">
                 <div class="row">
-                    <!-- KOLOM INPUT (SISI KIRI) -->
+                    <!-- KOLOM INPUT SISI KIRI -->
                     <div class="col-md-5 border-right pr-4">
                         <div class="section-title"><span class="brand-logo p-1 px-2 mr-2" style="font-size:0.75rem;">#</span> INVENTORY SEARCH</div>
                         <div class="section-subtitle">Input specific part numbers to check current stock availability.</div>
@@ -125,15 +129,3 @@
                             </div>
                         </form>
                     </div>
-                    
-                    <!-- KOLOM TAMPILAN HASIL (SISI KANAN) -->
-                    <div class="col-md-7 pl-4">
-                        <div id="outputArea" class="output-container">
-                            <span id="defaultText">AWAITING QUERY INPUT</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- TAB MENU KOSONG YANG SEDANG DISIAPKAN -->
